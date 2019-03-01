@@ -14,10 +14,18 @@ struct red_black_tree {
 };
 
 rbt *create_empty_red_black_tree() {
-	new_rbt = (rbt *) malloc(sizeof(rbt));
+	rbt *new_rbt = (rbt *) malloc(sizeof(rbt));
 	new_rbt = NULL;
 
 	return new_rbt; 
+}
+
+rbt *left_rotation(rbt *r_b_t) {
+	rbt *rbt_right_child = r_b_t -> right_child;
+	r_b_t -> right_child = r_b_t -> right_child -> left_child;
+	rbt_right_child -> left_child = r_b_t;
+
+	return rbt_right_child;
 }
 
 
