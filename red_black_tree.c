@@ -32,6 +32,18 @@ rbt *left_rotation(rbt *r_b_t) {
 	return rbt_right_child;
 }
 
+rbt *right_rotation(rbt *r_b_t) {
+	if(r_b_t != NULL && r_b_t -> left_child != NULL) {
+		rbt *rbt_left_child = r_b_t -> left_child;
+		r_b_t -> left_child = r_b_t -> left_child -> right_child;
+		rbt_left_child -> right_child = r_b_t;
+	}
+
+	// code to update the color
+
+	return rbt_left_child;
+}
+
 
 int main() {
 
