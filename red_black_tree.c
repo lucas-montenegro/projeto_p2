@@ -21,9 +21,13 @@ rbt *create_empty_red_black_tree() {
 }
 
 rbt *left_rotation(rbt *r_b_t) {
-	rbt *rbt_right_child = r_b_t -> right_child;
-	r_b_t -> right_child = r_b_t -> right_child -> left_child;
-	rbt_right_child -> left_child = r_b_t;
+	if(r_b_t != NULL && r_b_t -> right_child != NULL) {
+		rbt *rbt_right_child = r_b_t -> right_child;
+		r_b_t -> right_child = r_b_t -> right_child -> left_child;
+		rbt_right_child -> left_child = r_b_t;
+	}
+
+	// code to update the color
 
 	return rbt_right_child;
 }
