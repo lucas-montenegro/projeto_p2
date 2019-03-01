@@ -7,11 +7,18 @@
 typedef struct red_black_tree rbt;
 
 struct red_black_tree { 
-	bool color; // defines the color red or black 
+	bool color; // defines the color red or black, true for black and false for red
 	int item;
 	rbt *right_child;
 	rbt *left_child;
 };
+
+rbt *create_empty_red_black_tree() {
+	new_rbt = (rbt *) malloc(sizeof(rbt));
+	new_rbt = NULL;
+
+	return new_rbt; 
+}
 
 
 int main() {
