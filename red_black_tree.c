@@ -23,13 +23,49 @@ red_black_node* create_red_black_tree(int item, red_black_node *left, red_black_
     return new;
 }
 
-void add(red_black_node **rbt, int item, red_black_node *parent){
-    if(*rbt == NULL)
+red_black_node* add(red_black_node **rbt, int item, red_black_node *parent){
+    if(*rbt == NULL){
         *rbt = create_red_black_tree(item, NULL, NULL, parent);
+        return *rbt;
+    }
     else if((*rbt)->item > item)
         add(&(*rbt)->left, item, *rbt);
     else
         add(&(*rbt)->right, item, *rbt);
+}
+
+void fix(red_black_node **rbt){
+    red_black_node *prt = (*rbt)->parent;
+    if(prt != NULL && prt->color == false){//node's parent isn't black or node isn't root
+
+        if(prt->parent != NULL){//there's a grandparent
+
+            red_black_node *uncle;
+            if(prt == prt->parent->left)//parent is the left child
+                uncle = prt->parent->right;
+
+            else if (prt == prt->parent->right)//node is the right child
+                uncle = prt->parent->left;
+
+            if(uncle == NULL || uncle->color == true){//uncle is black
+                                                      //tentei implementar e deu merda, o resto ta funcionando
+            }
+            else {//uncle is red
+                prt->color = true;
+                uncle->color = true;
+                prt->parent->color = false;
+                fix(&prt->parent);
+            }
+        }
+    }
+    else if(prt == NULL)//root
+        (*rbt)->color = true;
+}
+
+void add_and_fix(red_black_node **rbt, int item){
+    red_black_node *added = NULL;
+    added = add(rbt, item, *rbt);
+    fix(&added);
 }
 
 void print_tree_in_order(red_black_node *rbt){
@@ -58,7 +94,8 @@ void print_tree_pre_order(red_black_node *rbt){
 
 int main(){
     red_black_node *rbt = NULL;
-    add(&rbt, 1, rbt);
+
+    add_and_fix(&rbt, 5);//valor qualquer
 
     return 0;
 }
