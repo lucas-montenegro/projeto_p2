@@ -55,3 +55,10 @@ void print_tree_pre_order(red_black_node *rbt){
         print_tree_pre_order(rbt->right);
     }
 }
+
+int main(){
+    red_black_node *rbt = NULL;
+    add(&rbt, 1, rbt);
+
+    return 0;
+}
