@@ -93,6 +93,82 @@ rbt *right_rotation(rbt **root, rbt *r_b_t) {
         r_b_t -> left_child -> parent = r_b_t;
     }
 
+
+void print_tree_pre_order(rbt *r_b_t) {
+    if(r_b_t != NULL){
+        if(r_b_t -> color == true) {
+            printf("black-> ");
+        }
+        else {
+            printf("red-> ");
+        }
+
+        printf("%d\n", r_b_t -> item);
+        print_tree_pre_order(r_b_t -> left_child);
+        print_tree_pre_order(r_b_t -> right_child);
+    }
+}
+
+rbt *left_rotation(rbt **root, rbt *r_b_t) {
+    rbt *rbt_right_child = NULL;
+
+    if(r_b_t != NULL && r_b_t -> right_child != NULL) {
+        rbt_right_child = r_b_t -> right_child;
+        r_b_t -> right_child = rbt_right_child -> left_child;
+        rbt_right_child -> left_child = r_b_t;
+    }
+
+    //change the pointer of the grandparent
+    if(r_b_t->parent != NULL){
+        if(r_b_t == r_b_t -> parent -> left_child) {
+            r_b_t -> parent -> left_child = rbt_right_child;
+        }
+        else {
+            r_b_t -> parent -> right_child = rbt_right_child;
+        }
+    }
+    else
+        *root = rbt_right_child;
+
+    //update the parents
+    rbt_right_child -> parent = r_b_t -> parent;
+    r_b_t -> parent = rbt_right_child;
+
+    if(r_b_t -> right_child != NULL) {
+        r_b_t -> right_child -> parent = r_b_t;
+    }
+    return rbt_right_child;
+}
+
+rbt *right_rotation(rbt **root, rbt *r_b_t) {
+    rbt *rbt_left_child = NULL;
+
+    if(r_b_t != NULL && r_b_t -> left_child != NULL) {
+        rbt_left_child = r_b_t -> left_child;
+        r_b_t -> left_child = rbt_left_child -> right_child;
+        rbt_left_child -> right_child = r_b_t;
+    }
+
+    //change the pointer of the grandparent
+    if(r_b_t -> parent != NULL){
+        if(r_b_t == r_b_t -> parent -> left_child) {
+            r_b_t -> parent -> left_child = rbt_left_child;
+        }
+        else {
+            r_b_t -> parent -> right_child = rbt_left_child;
+        }
+    }
+    else
+        *root = rbt_left_child;
+
+    //update the parents
+    rbt_left_child -> parent = r_b_t -> parent;
+    r_b_t -> parent = rbt_left_child;
+
+    if(r_b_t -> left_child != NULL) {
+        r_b_t -> left_child -> parent = r_b_t;
+    }
+
     return rbt_left_child;
 }
 
@@ -114,7 +190,10 @@ rbt* search(rbt *r_b_t, int item) {
         return NULL; //the node doesnt exist
     }
     else if(r_b_t -> item == item){
-        return r_b_t;
+        if(r_b_t -> right_child != NULL && r_b_t -> right_child -> item == item)
+            search(r_b_t -> right_child, item);
+        else
+            return r_b_t;
     }
     else if(r_b_t -> item > item) {
         search(r_b_t -> left_child, item);
@@ -157,9 +236,8 @@ void black_uncle(rbt **root, rbt *r_b_t, rbt *parent_node, rbt *uncle) {
 
 void fix(rbt **root, rbt *r_b_t) {
     rbt *parent_node = r_b_t -> parent;
-
-    if(parent_node != NULL && parent_node -> color == false && parent_node -> parent != NULL) {
-    //node's parent is red and there is a grandparent
+  
+    if(parent_node != NULL && parent_node -> color == false && parent_node -> parent != NULL) { //node's parent is red and there is a grandparent
         rbt *uncle;
 
         if(parent_node == parent_node -> parent -> left_child) { //parent is the left son of the grandparent
@@ -177,6 +255,7 @@ void fix(rbt **root, rbt *r_b_t) {
             black_uncle(root, r_b_t, parent_node, uncle);
         }
     }
+
     (*root) -> color = true;//keeps the root always black
 }
 
@@ -184,25 +263,20 @@ rbt *add_and_fix(rbt *root, int item) {
     rbt *added = NULL;
     added = add(&root, root, item);
 
+
     fix(&root, added);
 
     return root;
-}
 
-void print_tree_pre_order(rbt *r_b_t) {
-    if(r_b_t != NULL){
-        if(r_b_t -> color == true) {
-            printf("black-> ");
-        }
-        else {
-            printf("red-> ");
-        }
-
-        printf("%d\n", r_b_t -> item);
-        print_tree_pre_order(r_b_t -> left_child);
-        print_tree_pre_order(r_b_t -> right_child);
+    if(r_b_t == NULL) {
+        r_b_t = added;
     }
+
+    fix(&r_b_t, added);
+
+    return r_b_t;
 }
+
 
 int main() {
     int item;
@@ -214,6 +288,15 @@ int main() {
     }
 
     print_tree_pre_order(root); //tests
+
+    rbt *r_b_t = create_empty_red_black_tree();
+
+    while(scanf("%d", &item) != EOF) {
+        r_b_t = add_and_fix(r_b_t, item);
+    }
+
+    print_tree_pre_order(r_b_t); //tests
+
 
     return 0;
 }
