@@ -7,7 +7,7 @@
 ## Planejamento do Huffman (Para o grupo).
 
 	1 PASSO:
-	-Criar a leitura do arquivo ()
-	-Criar as estruturas e montagem da árvore ()
+	-Criar a leitura do arquivo -> Lucas e João 
+	-Criar as estruturas e montagem da árvore -> Vinícius e Luis
 
 	2 PASSO:
