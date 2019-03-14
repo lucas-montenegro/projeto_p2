@@ -2,7 +2,10 @@
 
 ## Sintaxe MARKDOWN
 
-### [Link](https://support.zendesk.com/hc/pt-br/articles/203691016-Formata%C3%A7%C3%A3o-de-texto-com-Markdown)
+#### [Link](https://support.zendesk.com/hc/pt-br/articles/203691016-Formata%C3%A7%C3%A3o-de-texto-com-Markdown)
+
+
+
 
 ## Planejamento do Huffman (Para o grupo).
 
