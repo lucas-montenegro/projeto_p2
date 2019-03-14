@@ -218,9 +218,3 @@ int main() {
  
     return 0;
 }
- 
-/* references:
-https://en.wikipedia.org/wiki/Red–black_treehttps://en.wikipedia.org/wiki/Red–black_tree
-https://www.geeksforgeeks.org/red-black-tree-set-2-insert/
-https://towardsdatascience.com/red-black-binary-tree-maintaining-balance-e342f5aa6f5
-*/
