@@ -1,0 +1,7 @@
+Planejamento do Huffman.
+
+1 PASSO:
+-Criar a leitura do arquivo ()
+-Criar as estruturas e montagem da árvore ()
+
+2 PASSO:
