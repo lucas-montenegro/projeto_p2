@@ -31,11 +31,11 @@ huffman* merge_nodes(huffman *left, huffman *right){
     return new;
 }
 
-heap* create_heap(int n){
+heap* create_heap(int size){
     heap *newHeap = (heap*) malloc(sizeof(heap));
-    newHeap->data = (huffman**) malloc(n * sizeof(huffman));
+    newHeap->data = (huffman**) malloc(size * sizeof(huffman));
     newHeap->items = 0;
-    newHeap->max = n;
+    newHeap->max = size;
     return newHeap;
 }
 
@@ -131,34 +131,31 @@ void print_heap(huffman **data, int index, int size){
     }
 }
 
-void read(heap *heap){
-    int value, frequency;
+huffman* build_tree(heap *heap){
+    int *value, frequency;
+    value = malloc(sizeof(int));
     printf("Informe o valor e frequencia:\n");
-    if(scanf("%d %d", &value, &frequency) == EOF){
-        printf("Heap:\n");
-        print_heap(heap->data, 1, heap->max);
-        while(heap->items > 1){//precisa ter ao menos dois nos para dar merge
-            huffman *aux = dequeue(heap), *sos = dequeue(heap);
-            huffman *help = merge_nodes(aux, sos);
-            enqueue(heap, help);
+    if(scanf("%d %d", value, &frequency) == EOF){//min-heap ja foi construida
+        while(heap->items > 1){//precisa ter ao menos dois nodes para dar merge
+            huffman *first = dequeue(heap), *second = dequeue(heap);
+            huffman *merged = merge_nodes(first, second);
+            enqueue(heap, merged);
         }
-        printf("Arvore:\n");
-        pre_order(heap->data[1]);
 
-        return;
+        return heap->data[1];
     }
-    void *ptr = &value;
+    void *ptr = value;
     add(ptr, frequency, heap);
-    read(heap);
+    build_tree(heap);
 }
 
 int main(){
-    int sz;
+    int size;
     printf("Heap size:\n");
-    scanf("%d", &sz);
-    heap *h = create_heap(sz + 1);//pedindo tamanho para questoes de teste, mas create_heap pode receber 1 e realocar a partir dai
-    read(h);
-    //FIX ---> fora de read a heap ainda recebe lixo de memoria do ponteiro void
+    scanf("%d", &size);
+    heap *h = create_heap(size + 1);//pedindo tamanho para questoes de teste, mas create_heap pode receber 1 e realocar a partir dai
+    huffman *huff_tree = build_tree(h);
+    pre_order(huff_tree);
 
     return 0;
 }
