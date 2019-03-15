@@ -4,8 +4,8 @@
 typedef struct huffman{
     void *item;
     int frequency;
-    struct huffman* left;
-    struct huffman* right;
+    struct huffman *left;
+    struct huffman *right;
 }huffman;
 
 typedef struct heap{
@@ -14,7 +14,7 @@ typedef struct heap{
 }heap;
 
 huffman* create_node(void *item, int frequency){
-    huffman* newNode = (huffman*) malloc(sizeof(huffman));
+    huffman *newNode = (huffman*) malloc(sizeof(huffman));
     newNode->item = item;
     newNode->frequency = frequency;
     newNode->left = NULL;
@@ -22,13 +22,13 @@ huffman* create_node(void *item, int frequency){
     return newNode;
 }
 
-huffman* sum_node(huffman* left, huffman* right){
-    huffman* sumNode = (huffman*) malloc(sizeof(huffman));
-    sumNode->item = (char*) '*';
-    sumNode->frequency = (left->frequency)+(right->frequency);
-    sumNode->left = left;
-    sumNode->right = right;
-    return sumNode;
+huffman* merge_nodes(huffman *left, huffman *right){
+    huffman *new = (huffman*) malloc(sizeof(huffman));
+    new->item = (char*) '*';
+    new->frequency = (left->frequency)+(right->frequency);
+    new->left = left;
+    new->right = right;
+    return new;
 }
 
 heap* create_heap(int n){
@@ -39,7 +39,7 @@ heap* create_heap(int n){
     return newHeap;
 }
 
-void realloc_heap(heap* heap){
+void realloc_heap(heap *heap){
     heap->data = realloc(heap->data, (++heap->max) * sizeof(huffman));
     return;
 }
@@ -100,7 +100,7 @@ void min_heapify(heap *heap, int index){
     }
 }
 
-huffman *dequeue(heap *heap){
+huffman* dequeue(heap *heap){
     if(heap->items <= 0){
         printf("Heap Underflow\n");
         return NULL;
@@ -112,11 +112,11 @@ huffman *dequeue(heap *heap){
     }
 }
 
-void pre_order(huffman* huffman){
+void pre_order(huffman *huffman){
     if(huffman != NULL){
         printf("frequency = %d\n", huffman->frequency);
-        preOrder(huffman->left);
-        preOrder(huffman->right);
+        pre_order(huffman->left);
+        pre_order(huffman->right);
     }
 }
 
@@ -135,13 +135,15 @@ void read(heap *heap){
     int value, frequency;
     printf("Informe o valor e frequencia:\n");
     if(scanf("%d %d", &value, &frequency) == EOF){
+        printf("Heap:\n");
         print_heap(heap->data, 1, heap->max);
         while(heap->items > 1){//precisa ter ao menos dois nos para dar merge
             huffman *aux = dequeue(heap), *sos = dequeue(heap);
-            huffman *help = sum_node(aux, sos);
+            huffman *help = merge_nodes(aux, sos);
             enqueue(heap, help);
         }
-        preOrder(heap->data[1]);
+        printf("Arvore:\n");
+        pre_order(heap->data[1]);
 
         return;
     }
