@@ -62,7 +62,7 @@ void put_hash(hash *hash, unsigned char *read_byte) {
 			return head -> value;
 		}
 
-		head = head -> next;
+		head = head -> next;  
 	}
 
 	return -1; // error code
@@ -76,7 +76,9 @@ hash *read_archive(char *name_file)
     hash *h_byte = create_hash();
 
     while(fscanf(archive, "%c", read_byte) != EOF)
+    {
         put_hash(h_byte, read_byte);
+    }
 
     fclose(archive);
 
@@ -84,9 +86,8 @@ hash *read_archive(char *name_file)
 }
 
 int main(int argc, char *argv[]) {
-    char *name_file = *argv;
 
-    hash *h_byte = read_archive(name_file);
+    hash *h_byte = read_archive(argv[1]);
 
     return 0;
 }
