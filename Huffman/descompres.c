@@ -6,41 +6,35 @@ typedef struct t_b binary_t;
 
 struct t_b 
 {
-	unsigned char *item;
+	unsigned char item;
 	binary_t *left;
 	binary_t *right;
 }
 
-void create_binary_tree(binary_t **b_t)
+binary_t *create_binary_tree(unsigned char byte, binary_t *left, binary_t*right)
 {
-	*bt = malloc(sizeof(binary_t));
-	(*bt)->item = NULL;
-	(*bt)->left = NULL;
-	(*bt)->right = NULL;
+	binary_t *new_node = (binary_t *) malloc(sizeof(binary_t));
+	new_node->item = byte;
+	new_node->left = left;
+	new_node->right = right;
+
+	return new_node;
 }
 
-create_t_reading (binary_bt *bt, FILE *archive, int size, int count) 
+
+binary_t *create_binary_tree(binary_t* bt, FILE *archive, short size, short count)
 {
-	if (count == size)
-		return bt;
-
-	if (fscanf(archive,	"%c", byte) == EOF)
-	{
-		printf("Archive incomplete\n");
-
-		return NULL;
-	}
-
-	if(*bt == '*')
-		bt->left = create_t_reading(bt)
+	
 }
 
 void decompactar(char *name_file) 
 {
+	short *count;
 	unsigned short trash, size_tree;
-	unsigned char *byte = (unsigned char*) (malloc(sizeof(unsigned char)));
-	unsigned char *byte_aux = (unsigned char*) (malloc(sizeof(unsigned char)));
+	unsigned char *byte = (unsigned char*) malloc(sizeof(unsigned char)); 
+	unsigned char *byte_aux = (unsigned char*) malloc(sizeof(unsigned char)); 
 	FILE *archive = fread(name_file, "wb");
+	binary_t *b_tree;
 
 	if (fscanf(archive,	"%c", byte) == EOF)
 	{
@@ -50,7 +44,7 @@ void decompactar(char *name_file)
 	}
 
 	*byte_aux = *byte;
-	(*byte_aux) >> 5;
+	*byte_aux >> 5;
 	trash = (short) *byte_aux;
 
 
@@ -70,10 +64,8 @@ void decompactar(char *name_file)
 	size_tree = size_tree | ((unsigned short) (*byte));
 
 
-	binary_t *b_tree;
-	create_binary_tree(&b_tree);
-	free(byte_aux);
+	create_binary_tree(NULLNULL, NULL);
 
-
-	create_t_reading (archive, size_tree, 0);
+	*count = 0;
+	create_t_reading (archive, size_tree, count);
 }
