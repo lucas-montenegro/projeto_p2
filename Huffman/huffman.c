@@ -3,6 +3,8 @@
 #include <string.h>
 
 #include "huffman.h"
+#include "hash.h"
+#include "heap.h"
 
 #define BYTE_ZERO 0
 
@@ -91,14 +93,33 @@ void treat_string(char **name_file)
     *name_file = new_string;
 }   
 
-void compress(char *name_file, huff *huff){
+void compress(char *name_file){
+    hash *h_byte = read_archive(name_file);
+    heap *h = create_heap(257);
+    huff *huff_tree = build_tree(h, h_byte);
+
+    printf("Hash:\n");
+    for(int i = 0; i < 257; i++){
+        if(h_byte -> table[i] != NULL) {
+            printf("%s -> %x -> %d\n", (unsigned char *)h_byte->table[i]->item, *(unsigned char *)h_byte->table[i]->item, h_byte->table[i]->frequency);
+        }
+    }
+    
+    printf("Árvore:\n");
+    pre_order(huff_tree);
+
     treat_string(&name_file);
     FILE *file = fopen(name_file, "wb");
     unsigned short size_tree = 0;
+    set_nodes(file, huff_tree, BYTE_ZERO, &size_tree, 0);
 
-    fprintf(file, "%c%c", BYTE_ZERO, BYTE_ZERO);
-    set_nodes(file, huff, BYTE_ZERO, &size_tree, 0);
+    if(size_tree >= 8192)
+    {
+        printf("Arvore maior que o cabeçalho!!\n");
 
-    // rewind(file);
-    // fprintf(file, "%c", size_tree);
+        return;
+    }
+
+    rewind(file);
+    fprintf(file, "%c", BYTE_ZERO);
 }

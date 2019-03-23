@@ -19,4 +19,4 @@ extern void set_nodes(FILE *file, huff *huff, unsigned char byte, unsigned short
 
 extern void treat_string(char **name_file);
 
-extern void compress(char *name_file, huff *huff);
+extern void compress(char *name_file);
