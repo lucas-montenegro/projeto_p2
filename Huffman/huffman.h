@@ -15,4 +15,8 @@ extern void pre_order(huff *huffman);
 
 extern unsigned char set_bit(unsigned char byte, unsigned short i);
 
-extern void set_nodes(huff *huff, unsigned char byte, unsigned short count);
+extern void set_nodes(FILE *file, huff *huff, unsigned char byte, unsigned short *size_tree, unsigned short count);
+
+extern void treat_string(char **name_file);
+
+extern void compress(char *name_file, huff *huff);

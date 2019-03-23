@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "huffman.h"
+
+#define BYTE_ZERO 0
 
 //não defini o strut aqui pois ele precisava ser definido na header, ja que funçoes de heap usam o sizeof de huff
 //e o compilador de c interpreta estruturas definidas na header como incompletas
@@ -41,7 +44,9 @@ unsigned char set_bit(unsigned char byte, unsigned short i){
     return mask | byte;
 }
 
-void set_nodes(huff *huff, unsigned char byte, unsigned short count){
+void set_nodes(FILE *file, huff *huff, unsigned char byte, unsigned short *size_tree, unsigned short count){
+    *size_tree += 1;
+
     if(huff->left == NULL && huff->right == NULL){
         unsigned char *aux = (unsigned char*) malloc(sizeof(unsigned char));
         *aux = byte;
@@ -49,24 +54,51 @@ void set_nodes(huff *huff, unsigned char byte, unsigned short count){
         huff->new_byte = (void*)aux;
         if(count > 0)
             huff->byte_size = count;
+
+        unsigned char aux_2 = *((unsigned char *) huff->item);
+        
+        if(aux_2 == '*' || aux_2 == '\\')
+            fprintf(file,"%c", '\\');
+
+        fprintf(file, "%c", aux_2);
+
         return;
     }
-    set_nodes(huff->left, byte, count + 1);
+
+    fprintf(file, "%c", *((unsigned char *) huff->item));
+
+    set_nodes(file, huff->left, byte, size_tree, count + 1);
     byte = set_bit(byte, count);
-    set_nodes(huff->right, byte, count + 1);
+    set_nodes(file, huff->right, byte, size_tree, count + 1);
 }
-/*
-                                *                           3
-                            *       3
-                        1       2
 
+void treat_string(char **name_file)
+{
+    unsigned short s1_string = strlen(*name_file), s2_string = s1_string + 4, i, ver = 0; 
+    char *new_string = (char *)malloc(sizeof(char) * s2_string); 
+    for (i = 0; i < s2_string; i++)
+        new_string[i] = '\0';
 
-count = 0; byte = 00000000 *;
-count = 1; byte = 00000000 *;
-count = 2; byte = 00000000 1; byte de 1 = 00000000; byte_size = 2;
-count = 1; byte = 00000010 *;
-count = 2; byte = 00000010 2; byte de 2 = 00000010; byte_size = 2;
-count = 1; byte = 00000010 *;
-count = 0; byte = 00000001 *;
-count = 1; byte = 00000001 3; byte de 3 = 00000001; byte_size = 1;
-*/
+    for(i = 0; i < s1_string; i++){
+        if((*name_file)[i] == '.')
+            break;
+        
+        new_string[i] = (*name_file)[i];
+    }
+
+    strcat(new_string, ".huff");
+
+    *name_file = new_string;
+}   
+
+void compress(char *name_file, huff *huff){
+    treat_string(&name_file);
+    FILE *file = fopen(name_file, "wb");
+    unsigned short size_tree = 0;
+
+    fprintf(file, "%c%c", BYTE_ZERO, BYTE_ZERO);
+    set_nodes(file, huff, BYTE_ZERO, &size_tree, 0);
+
+    // rewind(file);
+    // fprintf(file, "%c", size_tree);
+}

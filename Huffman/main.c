@@ -15,6 +15,9 @@ int main(int argc, char *argv[]) {
             printf("%s -> %x -> %d\n", (unsigned char *)h_byte->table[i]->item, *(unsigned char *)h_byte->table[i]->item, h_byte->table[i]->frequency);
         }
     }
+
+    compress(argv[1], huff_tree);
+    
     printf("Árvore:\n");
     pre_order(huff_tree);
 
