@@ -120,6 +120,6 @@ void compress(char *name_file){
         return;
     }
 
-    rewind(file);
-    fprintf(file, "%c", BYTE_ZERO);
+    //rewind(file);
+    //fprintf(file, "%c", BYTE_ZERO);
 }
