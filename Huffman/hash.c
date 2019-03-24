@@ -87,5 +87,6 @@ unsigned short read_write_compress(FILE *file_write, FILE *file_read, hash *h_by
         fprintf(file_write, "%c", byte_t);
     }
 
+    count --;
     return (8 - count);
 }   
