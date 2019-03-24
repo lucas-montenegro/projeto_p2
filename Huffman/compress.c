@@ -60,7 +60,9 @@ void compress(char *name_file){
     }
 
     printf("trash %d\n", trash);
-    unsigned char byte_1 = (((unsigned char) trash) << 5); 
+    unsigned char byte_1 = (unsigned char) trash;
+    printf("byte_1%x\n", byte_1);
+    printf("%d\n", trash); 
     unsigned char byte_2 = ((unsigned char) (size_tree >> 8));
 
     byte_1 = byte_1 | byte_2;    

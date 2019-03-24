@@ -55,7 +55,7 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 
 	binary_t *actual_node = b_tree;
 
-	if(!feof(file)) {
+	if(feof(file)) {
 		printf("File incomplete.\n");
 
 		return;
@@ -68,12 +68,6 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 		if(feof(file)) {
 			while(cont < trash) {
 				bit = (unsigned short) read_bit(byte, cont);
-		fscanf(file, "%hhu", &byte);
-		cont = 0;
-
-		if(!feof(file)) {
-			while(cont < trash) {
-				bit = read_bit(byte, cont);
 
 				if(actual_node -> right != NULL || actual_node -> left != NULL) {
 					if(bit == 1) {
@@ -85,7 +79,6 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 				}
 				else {
 					fprintf(new_file, "%c", *((unsigned char*) actual_node -> item));
-					fprintf(new_file, "%hhu", *((unsigned char*) actual_node -> item));
 					actual_node = b_tree;
 				}
 
@@ -97,7 +90,6 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 
 		while(cont <= 7) {
 			bit = (unsigned short)read_bit(byte, cont);
-			bit = read_bit(byte, cont);
 
 			if(actual_node -> right != NULL || actual_node -> left != NULL) {
 				if(bit != 0) {
@@ -120,23 +112,22 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 
 void treat_string_2(char **name_file)
 {
-    unsigned short s1_string = strlen(*name_file), s2_string = s1_string + 4, i, ver = 0; 
-    char *new_string = (char *)malloc(sizeof(char) * s2_string); 
-    for (i = 0; i < s2_string; i++)
-        new_string[i] = '\0';
+	unsigned short s1_string = strlen(*name_file), s2_string = s1_string + 4, i, ver = 0; 
+	char *new_string = (char *)malloc(sizeof(char) * s2_string); 
+	for (i = 0; i < s2_string; i++)
+		new_string[i] = '\0';
 
-    for(i = 0; i < s1_string; i++){
-        if((*name_file)[i] == '.')
-            break;
-        
-        new_string[i] = (*name_file)[i];
-    }
+	for(i = 0; i < s1_string; i++){
+		if((*name_file)[i] == '.')
+			break;
 
-    *name_file = new_string;
+		new_string[i] = (*name_file)[i];
+	}
+
+	*name_file = new_string;
 }   
 
-void descompress(char *name_file) 
-{
+void descompress(char *name_file)  {
 	//Leitura do cabecalho
 	unsigned short trash, size_tree; //Tamanho das partes dos arquivos (2 Byte)
 	unsigned char byte, byte_aux; //Bytes para leitura e operações (1 Byte)
@@ -186,5 +177,7 @@ void descompress(char *name_file)
 	treat_string_2(&name_file);
 	FILE *new_file = fopen(name_file, "wb"); //cria um novo arquivo, para descompactá-lo
 	read_descompress(file, new_file, b_tree, trash);
+	
 	fclose(new_file);
+	fclose(file);
 }
