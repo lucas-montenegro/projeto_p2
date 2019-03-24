@@ -21,7 +21,7 @@ void bt_print (binary_t *bt)
 	if(bt == NULL)
 		return;
 
-	printf("%x ", *((unsigned char *)bt->item));
+	printf("%c ", *((unsigned char *)bt->item));
 	bt_print(bt->left);
 	bt_print(bt->right);
 }

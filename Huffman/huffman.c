@@ -3,8 +3,6 @@
 #include <string.h>
 
 #include "huffman.h"
-#include "hash.h"
-#include "heap.h"
 
 #define BYTE_ZERO 0
 
@@ -63,63 +61,15 @@ void set_nodes(FILE *file, huff *huff, unsigned char byte, unsigned short *size_
             fprintf(file,"%c", '\\');
 
         fprintf(file, "%c", aux_2);
+        printf("%c\n", *((unsigned char *) huff->item));
 
         return;
     }
 
     fprintf(file, "%c", *((unsigned char *) huff->item));
+    printf("%c\n", *((unsigned char *) huff->item));
 
     set_nodes(file, huff->left, byte, size_tree, count + 1);
     byte = set_bit(byte, count);
     set_nodes(file, huff->right, byte, size_tree, count + 1);
-}
-
-void treat_string(char **name_file)
-{
-    unsigned short s1_string = strlen(*name_file), s2_string = s1_string + 4, i, ver = 0; 
-    char *new_string = (char *)malloc(sizeof(char) * s2_string); 
-    for (i = 0; i < s2_string; i++)
-        new_string[i] = '\0';
-
-    for(i = 0; i < s1_string; i++){
-        if((*name_file)[i] == '.')
-            break;
-        
-        new_string[i] = (*name_file)[i];
-    }
-
-    strcat(new_string, ".huff");
-
-    *name_file = new_string;
-}   
-
-void compress(char *name_file){
-    hash *h_byte = read_archive(name_file);
-    heap *h = create_heap(257);
-    huff *huff_tree = build_tree(h, h_byte);
-
-    printf("Hash:\n");
-    for(int i = 0; i < 257; i++){
-        if(h_byte -> table[i] != NULL) {
-            printf("%s -> %x -> %d\n", (unsigned char *)h_byte->table[i]->item, *(unsigned char *)h_byte->table[i]->item, h_byte->table[i]->frequency);
-        }
-    }
-    
-    printf("Árvore:\n");
-    pre_order(huff_tree);
-
-    treat_string(&name_file);
-    FILE *file = fopen(name_file, "wb");
-    unsigned short size_tree = 0;
-    set_nodes(file, huff_tree, BYTE_ZERO, &size_tree, 0);
-
-    if(size_tree >= 8192)
-    {
-        printf("Arvore maior que o cabeçalho!!\n");
-
-        return;
-    }
-
-    //rewind(file);
-    //fprintf(file, "%c", BYTE_ZERO);
 }

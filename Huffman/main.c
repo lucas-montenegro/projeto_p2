@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "huffman.h"
+#include "compress.h"
+#include "descompress.h"
     
 
 int main(int argc, char *argv[]) {
@@ -10,8 +11,8 @@ int main(int argc, char *argv[]) {
     {
         if(argv[1][0] == '0')
             compress(argv[2]);
-        //else if(argv[1][0] == '1')
-            //descompress(argv[2]);    
+        else if(argv[1][0] == '1')
+            descompress(argv[2]);    
     }
     else
     {
