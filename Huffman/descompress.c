@@ -62,21 +62,18 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 	}
 
 	while(1) {
-<<<<<<< HEAD
 		fscanf(file, "%c", &byte);
 		cont = 0;
 
 		if(feof(file)) {
 			while(cont < trash) {
 				bit = (unsigned short) read_bit(byte, cont);
-=======
 		fscanf(file, "%hhu", &byte);
 		cont = 0;
 
 		if(!feof(file)) {
 			while(cont < trash) {
 				bit = read_bit(byte, cont);
->>>>>>> ecdd500cbb023a451124fb567bee18801e5fb038
 
 				if(actual_node -> right != NULL || actual_node -> left != NULL) {
 					if(bit == 1) {
@@ -87,11 +84,8 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 					}
 				}
 				else {
-<<<<<<< HEAD
 					fprintf(new_file, "%c", *((unsigned char*) actual_node -> item));
-=======
 					fprintf(new_file, "%hhu", *((unsigned char*) actual_node -> item));
->>>>>>> ecdd500cbb023a451124fb567bee18801e5fb038
 					actual_node = b_tree;
 				}
 
@@ -102,11 +96,8 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 		}
 
 		while(cont <= 7) {
-<<<<<<< HEAD
 			bit = (unsigned short)read_bit(byte, cont);
-=======
 			bit = read_bit(byte, cont);
->>>>>>> ecdd500cbb023a451124fb567bee18801e5fb038
 
 			if(actual_node -> right != NULL || actual_node -> left != NULL) {
 				if(bit != 0) {
