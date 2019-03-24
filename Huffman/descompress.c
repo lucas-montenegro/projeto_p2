@@ -144,14 +144,14 @@ void descompress(char *name_file)  {
 	printf("Byte %x ", byte);
 	
 	byte_aux = byte;
-	byte_aux >> 5;
+	byte_aux >>= 5;
 	trash = (short) byte_aux;
 
 	byte_aux = byte;
-	byte_aux << 3;
-	byte_aux >> 3;
+	byte_aux <<= 3;
+	byte_aux >>= 3;
 	size_tree = (short) byte_aux;
-	size_tree << 8;
+	size_tree >>= 8;
 
 
 	if (fscanf(file, "%c", &byte) == EOF)
@@ -164,7 +164,7 @@ void descompress(char *name_file)  {
 	printf("%x\n", byte);
 	size_tree = (size_tree | ((unsigned short) byte));
 	
-	printf("size_tree %d\n", size_tree);
+	printf("trash: %d | size_tree %d\n", trash, size_tree);
 
 	//Leitura e da montagem da arvore
 	short count = 0;

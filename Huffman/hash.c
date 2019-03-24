@@ -61,8 +61,8 @@ unsigned short read_write_compress(FILE *file_write, FILE *file_read, hash *h_by
             aux = (unsigned char *) h_byte->table[(unsigned char) byte]->new_byte;
             byte_m = *aux;
             i_aux = count + h_byte->table[byte]->byte_size;
+            printf("byte: %x | byte_size: %d\n\n", byte_m, h_byte->table[byte]->byte_size);
 
-            
             if (i_aux > 8)
             {
                 count = 0;

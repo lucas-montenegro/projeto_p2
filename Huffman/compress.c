@@ -32,15 +32,15 @@ void compress(char *name_file){
     heap *h = create_heap(257);
     huff *huff_tree = build_tree(h, h_byte);
 
-    printf("Hash:\n");
-    for(int i = 0; i < 257; i++){
-        if(h_byte -> table[i] != NULL) {
-            printf("%d -> %x -> %d\n", *(unsigned char *)h_byte->table[i]->item, *(unsigned char *)h_byte->table[i]->item, h_byte->table[i]->frequency);
-        }
-    }
+    // printf("Hash:\n");
+    // for(int i = 0; i < 257; i++){
+    //     if(h_byte -> table[i] != NULL) {
+    //         printf("%d -> %x -> %d\n", *(unsigned char *)h_byte->table[i]->item, *(unsigned char *)h_byte->table[i]->item, h_byte->table[i]->frequency);
+    //     }
+    // }
     
-    printf("Árvore:\n");
-    pre_order(huff_tree);
+    // printf("Árvore:\n");
+    // pre_order(huff_tree);
     
     FILE *file_read = fopen(name_file, "rb");
     
@@ -51,6 +51,7 @@ void compress(char *name_file){
     
     unsigned short size_tree = 0, trash;
     set_nodes(file_write, huff_tree, BYTE_ZERO, &size_tree, 0);
+    trash = read_write_compress(file_write, file_read, h_byte);
 
     if(size_tree >= 8192)
     {
@@ -59,17 +60,12 @@ void compress(char *name_file){
         return;
     }
 
-    printf("trash %d\n", trash);
-    unsigned char byte_1 = (unsigned char) trash;
-    printf("byte_1%x\n", byte_1);
-    printf("%d\n", trash); 
-    unsigned char byte_2 = ((unsigned char) (size_tree >> 8));
+    unsigned char byte_1 = (((unsigned char) trash) << 5);
+    unsigned char byte_2 = ((((unsigned char) (size_tree >> 8)) << 3) >> 3);
 
     byte_1 = byte_1 | byte_2;    
     byte_2 = ((unsigned char)((size_tree << 8) >> 8));
 
     rewind(file_write);
     fprintf(file_write, "%c%c", byte_1, byte_2);
-
-    printf("Bytes\n%x %x\n", byte_1, byte_2);
 }

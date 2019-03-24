@@ -50,6 +50,7 @@ void set_nodes(FILE *file, huff *huff, unsigned char byte, unsigned short *size_
     if(huff->left == NULL && huff->right == NULL){
         unsigned char *aux = (unsigned char*) malloc(sizeof(unsigned char));
         *aux = byte;
+        printf("byte %x | size_byte %d\n\n", byte, count);
 
         huff->new_byte = (void*)aux;
         if(count > 0)
@@ -61,13 +62,13 @@ void set_nodes(FILE *file, huff *huff, unsigned char byte, unsigned short *size_
             fprintf(file,"%c", '\\');
 
         fprintf(file, "%c", aux_2);
-        printf("%c\n", *((unsigned char *) huff->item));
+        //printf("%c\n", *((unsigned char *) huff->item));
 
         return;
     }
 
     fprintf(file, "%c", *((unsigned char *) huff->item));
-    printf("%c\n", *((unsigned char *) huff->item));
+    //printf("%c\n", *((unsigned char *) huff->item));
 
     set_nodes(file, huff->left, byte, size_tree, count + 1);
     byte = set_bit(byte, count);
