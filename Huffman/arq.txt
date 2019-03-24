@@ -1,1 +1,3 @@
-AAAAAABBBBBCCCCDDDEEF
+Hello world compressão!
+olá meu amigo?.,
+Texto é um conjunto de palavras e frases encadeadas que permitem interpretação e transmitem uma mensagem

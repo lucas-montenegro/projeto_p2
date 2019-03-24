@@ -58,14 +58,14 @@ unsigned short read_write_compress(FILE *file_write, FILE *file_read, hash *h_by
             if (fscanf(file_read, "%c", &byte) == EOF)
                 break;
             
-            aux = (unsigned char *) h_byte->table[(unsigned char) byte]->new_byte;
+            aux = (unsigned char *) h_byte -> table[(unsigned char) byte] -> new_byte;
             byte_m = *aux;
-            i_aux = count + h_byte->table[byte]->byte_size;
-            printf("byte: %x | byte_size: %d\n\n", byte_m, h_byte->table[byte]->byte_size);
+            i_aux = count + h_byte->table[byte] -> byte_size;
+            //printf("byte: %x | byte_size: %d\n\n", byte_m, h_byte->table[byte]->byte_size);
 
             if (i_aux > 8)
             {
-                count = 0;
+                count = i_aux % 8;
                 resto = i_aux % 8;
                 byte_m >>= resto;
                 byte_t = byte_t | byte_m;
@@ -75,18 +75,19 @@ unsigned short read_write_compress(FILE *file_write, FILE *file_read, hash *h_by
                 byte_t = BYTE_ZERO;
                 byte_m = *aux; 
                 byte_m <<= (8 - resto);
+                //printf("Resto -> %x\n", byte_m);
             }
-            else
+            else {
                 byte_m <<= (8 - i_aux);
-            
-            byte_t = byte_t | byte_m;
+                count += h_byte->table[byte]->byte_size;
+            }
 
-            count += h_byte->table[byte]->byte_size;
+            byte_t = byte_t | byte_m;
+            //printf("Byte -> %x\n", byte_t);
         }
         
         fprintf(file_write, "%c", byte_t);
     }
 
-    count --;
     return (8 - count);
 }   

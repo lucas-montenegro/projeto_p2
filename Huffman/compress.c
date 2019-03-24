@@ -8,8 +8,7 @@
 #include "compress.h"
 
 
-void treat_string(char **name_file)
-{
+void treat_string(char **name_file) {
     unsigned short s1_string = strlen(*name_file), s2_string = s1_string + 4, i, ver = 0; 
     char *new_string = (char *)malloc(sizeof(char) * s2_string); 
     for (i = 0; i < s2_string; i++)
@@ -27,7 +26,7 @@ void treat_string(char **name_file)
     *name_file = new_string;
 }
 
-void compress(char *name_file){
+void compress(char *name_file) {
     hash *h_byte = read_archive(name_file);
     heap *h = create_heap(257);
     huff *huff_tree = build_tree(h, h_byte);

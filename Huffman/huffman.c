@@ -54,7 +54,7 @@ void set_nodes(FILE *file, huff *huff, unsigned char byte, unsigned short *size_
         byte >>= 8 - count;
         *aux = byte;
         //printf("byte %x | size_byte %d\n\n", byte, count);
-        printf("item: %c | byte: %x | size_byte %d\n\n", *((unsigned char*)(huff->item)), byte, count);
+        printf("item: %c | byte: %x | size_byte %d | frequency %d\n\n", *((unsigned char*)(huff->item)), byte, count, huff -> frequency);
         huff->new_byte = (void*)aux;
 
         if(count > 0)
