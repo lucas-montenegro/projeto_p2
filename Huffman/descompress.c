@@ -44,18 +44,18 @@ void create_t_reading(binary_t **bt, FILE *file, short size, short *count)
 }
 
 unsigned char read_bit(unsigned char byte, int cont) {
-	byte = 0 << cont;
-	byte = 0 >> 7 - (cont + 1);
+	unsigned char mask = 1 << (7 - cont);
 
-	return byte;
+	return byte & mask;
 }
 
 void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned short trash) {
-	unsigned short cont = 0, aux = 0;
-	unsigned char byte, bit;
+	unsigned short cont = 0, bit;
+	unsigned char byte;
+
 	binary_t *actual_node = b_tree;
 
-	if(feof(file)) {
+	if(!feof(file)) {
 		printf("File incomplete.\n");
 
 		return;
@@ -63,10 +63,10 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 
 	while(1) {
 		fscanf(file, "%hhu", &byte);
-		aux = 0;
+		cont = 0;
 
-		if(feof(file)) {
-			while(aux < trash) {
+		if(!feof(file)) {
+			while(cont < trash) {
 				bit = read_bit(byte, cont);
 
 				if(actual_node -> right != NULL || actual_node -> left != NULL) {
@@ -76,48 +76,38 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 					else {	
 						actual_node = actual_node -> left;
 					}
-
-					cont++;
 				}
 				else {
 					fprintf(new_file, "%hhu", *((unsigned char*) actual_node -> item));
-
-					cont = 0;
 					actual_node = b_tree;
 				}
 
-				aux++;
+				cont++;
 			}
 
 			break;
 		}
 
-		while(aux <= 7) {
+		while(cont <= 7) {
 			bit = read_bit(byte, cont);
 
 			if(actual_node -> right != NULL || actual_node -> left != NULL) {
-				if(bit == 1) {
+				if(bit != 0) {
 					actual_node = actual_node -> right;
 				}
 				else {	
 					actual_node = actual_node -> left;
 				}
-
-				cont++;
 			}
 			else {
 				fprintf(new_file, "%hhu", *((unsigned char*) actual_node -> item));
 
-				cont = 0;
 				actual_node = b_tree;
 			}
 
-			aux++;
+			cont++;
 		}
 	}
-
-
-	return;
 }
 
 void treat_string_2(char **name_file)
