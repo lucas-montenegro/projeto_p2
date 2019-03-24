@@ -53,7 +53,7 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 	unsigned short cont = 0, cont_aux = 0, bit;
 	unsigned char byte_1, byte_2;
 
-	binary_t *actual_node = b_tree;
+	binary_t *current_node = b_tree;
 
 	if(feof(file)) {
 		printf("File incomplete.\n");
@@ -68,56 +68,64 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 		//printf("%d\n", cont_aux);
 
 		if(fscanf(file, "%c", &byte_2) == EOF) {
-			//printf("%x\n", byte_1);
-			while(cont <= (8 - trash)) {
-				//printf("%d < %d\n", cont, trash);
+			while(cont < (8 - trash)) {
+				//printf("%d < %d\n", cont, 8 - trash);
 				bit = (unsigned short) read_bit(byte_1, cont);
 
-				if(actual_node -> right != NULL || actual_node -> left != NULL) {
+				if(current_node -> right != NULL || current_node -> left != NULL) {
+					//printf("oi\n");
 					if(bit != 0) {
-						actual_node = actual_node -> right;
+						current_node = current_node -> right;
 					}
 					else {	
-						actual_node = actual_node -> left;
+						current_node = current_node -> left;
 					}
 
 					cont++;
-					//printf("%c\n", *((unsigned char*)actual_node -> item));
-				}
-				else {
-					fprintf(new_file, "%c", *((unsigned char*) actual_node -> item));
+					//printf("%c\n", *((unsigned char*)current_node -> item));
+				}	
+				else if(current_node -> right == NULL && current_node -> left == NULL){
+					fprintf(new_file, "%c", *((unsigned char*) current_node -> item));
+					//printf("%c\n", *((unsigned char*)current_node -> item));
 
-					actual_node = b_tree;
+					current_node = b_tree;
 				}
 			}
+			
+			if(current_node -> right == NULL && current_node -> left == NULL){
+					fprintf(new_file, "%c", *((unsigned char*) current_node -> item));
+					//printf("%c\n", *((unsigned char*)current_node -> item));
 
-			break;
+					current_node = b_tree;
+				}
+
+			return;
 		}
 		else {
 			while(cont <= 7) {
 				bit = (unsigned short) read_bit(byte_1, cont);
 
-				if(actual_node -> right != NULL || actual_node -> left != NULL) {
+				if(current_node -> right != NULL || current_node -> left != NULL) {
 					if(bit != 0) {
-						actual_node = actual_node -> right;
+						current_node = current_node -> right;
 					}
 					else {	
-						actual_node = actual_node -> left;
+						current_node = current_node -> left;
 					}
 
-					//printf("%c\n", *((unsigned char*)actual_node -> item));
+					//printf("%c\n", *((unsigned char*)current_node -> item));
 
 					cont++;
 				}
-				else if(actual_node -> right == NULL && actual_node -> left == NULL){
-					fprintf(new_file, "%c", *((unsigned char*) actual_node -> item));
+				else if(current_node -> right == NULL && current_node -> left == NULL){
+					fprintf(new_file, "%c", *((unsigned char*) current_node -> item));
 
-					actual_node = b_tree;
+					current_node = b_tree;
 				}
 			}
-		}
 
-		fseek(file, -1, SEEK_CUR);
+			fseek(file, -1, SEEK_CUR);
+		}
 	}
 }
 
