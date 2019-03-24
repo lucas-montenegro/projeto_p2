@@ -12,3 +12,5 @@
 	-Criar as estruturas e montagem da árvore -> Vinícius e Luis
 
 	2 PASSO:
+	-Criar a descompactação -> TODO MUNDO AJUDOU
+	-Criar a compactação -> TODO MUNDO AJUDOU
