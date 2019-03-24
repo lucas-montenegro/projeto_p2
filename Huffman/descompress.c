@@ -10,8 +10,8 @@ void create_t_reading(binary_t **bt, FILE *file, short size, short *count)
 	if(*count == size)
 		return;
 
-	unsigned char byte;
-	if(fscanf(file, "%c", &byte) == EOF)
+	unsigned char byte_1;
+	if(fscanf(file, "%c", &byte_1) == EOF)
 	{		
 		*count += 1;
 
@@ -20,38 +20,38 @@ void create_t_reading(binary_t **bt, FILE *file, short size, short *count)
 		return;
 	}
 
-	if(byte == '*') //Se for um *
+	if(byte_1 == '*') //Se for um *
 	{
 		
 
-		*bt = create_binary_tree(byte, NULL, NULL);
+		*bt = create_binary_tree(byte_1, NULL, NULL);
 		create_t_reading(&((*bt)->left), file, size, count);
 		create_t_reading(&((*bt)->right), file, size, count);
 	}
-	else if(byte == '\\') //Se for uma barra
+	else if(byte_1 == '\\') //Se for uma barra
 	{
-		if(fscanf(file, "%c", &byte) == EOF)
+		if(fscanf(file, "%c", &byte_1) == EOF)
 		{
 			printf("Header -> Tree incomplete\n");
 
 			return;
 		}
 
-		*bt = create_binary_tree(byte, NULL, NULL);
+		*bt = create_binary_tree(byte_1, NULL, NULL);
 	}
 	else
-		*bt = create_binary_tree(byte, NULL, NULL);	
+		*bt = create_binary_tree(byte_1, NULL, NULL);	
 }
 
-unsigned char read_bit(unsigned char byte, int cont) {
+unsigned char read_bit(unsigned char byte_1, int cont) {
 	unsigned char mask = 1 << (7 - cont);
 
-	return byte & mask;
+	return byte_1 & mask;
 }
 
 void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned short trash) {
-	unsigned short cont = 0, bit;
-	unsigned char byte;
+	unsigned short cont = 0, cont_aux = 0, bit;
+	unsigned char byte_1, byte_2;
 
 	binary_t *actual_node = b_tree;
 
@@ -61,52 +61,63 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 		return;
 	}
 
-	while(1) {
-		fscanf(file, "%c", &byte);
+	while(fscanf(file, "%c", &byte_1) != EOF) {
+		//printf("%x\n", byte_1);
 		cont = 0;
+		cont_aux++;
+		//printf("%d\n", cont_aux);
 
-		if(feof(file)) {
-			while(cont < trash) {
-				bit = (unsigned short) read_bit(byte, cont);
+		if(fscanf(file, "%c", &byte_2) == EOF) {
+			//printf("%x\n", byte_1);
+			while(cont <= (8 - trash)) {
+				//printf("%d < %d\n", cont, trash);
+				bit = (unsigned short) read_bit(byte_1, cont);
 
 				if(actual_node -> right != NULL || actual_node -> left != NULL) {
-					if(bit == 1) {
+					if(bit != 0) {
 						actual_node = actual_node -> right;
 					}
 					else {	
 						actual_node = actual_node -> left;
 					}
+
+					cont++;
+					//printf("%c\n", *((unsigned char*)actual_node -> item));
 				}
 				else {
 					fprintf(new_file, "%c", *((unsigned char*) actual_node -> item));
+
 					actual_node = b_tree;
 				}
-
-				cont++;
 			}
 
 			break;
 		}
+		else {
+			while(cont <= 7) {
+				bit = (unsigned short) read_bit(byte_1, cont);
 
-		while(cont <= 7) {
-			bit = (unsigned short)read_bit(byte, cont);
+				if(actual_node -> right != NULL || actual_node -> left != NULL) {
+					if(bit != 0) {
+						actual_node = actual_node -> right;
+					}
+					else {	
+						actual_node = actual_node -> left;
+					}
 
-			if(actual_node -> right != NULL || actual_node -> left != NULL) {
-				if(bit != 0) {
-					actual_node = actual_node -> right;
+					//printf("%c\n", *((unsigned char*)actual_node -> item));
+
+					cont++;
 				}
-				else {	
-					actual_node = actual_node -> left;
+				else if(actual_node -> right == NULL && actual_node -> left == NULL){
+					fprintf(new_file, "%c", *((unsigned char*) actual_node -> item));
+
+					actual_node = b_tree;
 				}
 			}
-			else {
-				fprintf(new_file, "%c", *((unsigned char*) actual_node -> item));
-
-				actual_node = b_tree;
-			}
-
-			cont++;
 		}
+
+		fseek(file, -1, SEEK_CUR);
 	}
 }
 
@@ -129,40 +140,40 @@ void treat_string_2(char **name_file)
 
 void descompress(char *name_file)  {
 	//Leitura do cabecalho
-	unsigned short trash, size_tree; //Tamanho das partes dos arquivos (2 Byte)
-	unsigned char byte, byte_aux; //Bytes para leitura e operações (1 Byte)
+	unsigned short trash, size_tree; //Tamanho das partes dos arquivos (2 byte_1)
+	unsigned char byte_1, byte_1_aux; //byte_1s para leitura e operações (1 byte_1)
 	FILE *file = fopen(name_file, "rb"); //Ponteiro para o file referente, em forma de leitura binaria
 	binary_t *b_tree = NULL; //Estrutura da arvóre
 
-	if (fscanf(file, "%c", &byte) == EOF)
+	if (fscanf(file, "%c", &byte_1) == EOF)
 	{
 		printf("Header incomplete\n");
 
 		return;
 	}
 
-	printf("Byte %x ", byte);
+	printf("byte_1 %x ", byte_1);
 	
-	byte_aux = byte;
-	byte_aux >>= 5;
-	trash = (short) byte_aux;
+	byte_1_aux = byte_1;
+	byte_1_aux >>= 5;
+	trash = (short) byte_1_aux;
 
-	byte_aux = byte;
-	byte_aux <<= 3;
-	byte_aux >>= 3;
-	size_tree = (short) byte_aux;
+	byte_1_aux = byte_1;
+	byte_1_aux <<= 3;
+	byte_1_aux >>= 3;
+	size_tree = (short) byte_1_aux;
 	size_tree >>= 8;
 
 
-	if (fscanf(file, "%c", &byte) == EOF)
+	if (fscanf(file, "%c", &byte_1) == EOF)
 	{
 		printf("File incomplete\n");
 
 		return;
 	}
 
-	printf("%x\n", byte);
-	size_tree = (size_tree | ((unsigned short) byte));
+	printf("%x\n", byte_1);
+	size_tree = (size_tree | ((unsigned short) byte_1));
 	
 	printf("trash: %d | size_tree %d\n", trash, size_tree);
 
@@ -173,11 +184,12 @@ void descompress(char *name_file)  {
 	// bt_print(b_tree);
 	// printf("\n");
 
-	//comeca a ler o arquivo byte a byte e descompacta o arquivo
+	//comeca a ler o arquivo byte_1 a byte_1 e descompacta o arquivo
 	treat_string_2(&name_file);
 	FILE *new_file = fopen(name_file, "wb"); //cria um novo arquivo, para descompactá-lo
 	read_descompress(file, new_file, b_tree, trash);
 	
+	//printf("10101100 01001101 11000000\n");
 	fclose(new_file);
 	fclose(file);
 }
