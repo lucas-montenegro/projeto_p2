@@ -49,31 +49,26 @@ void set_nodes(FILE *file, huff *huff, unsigned short byte, unsigned short *size
     *size_tree += 1;
 
     if(huff->left == NULL && huff->right == NULL) {
-        //printf("ANTES: %d\n", count);
         unsigned short *aux = (unsigned short*) malloc(sizeof(unsigned short));
         byte = byte >> (16 - count);
         *aux = byte;
-        //printf("byte %x | size_byte %d\n\n", byte, count);
-        printf("item: %c | byte: %x | size_byte %d | frequency %d\n\n", *((unsigned short*)(huff->item)), byte, count, huff -> frequency);
         huff->new_byte = (void*)aux;
 
         if(count > 0)
             huff->byte_size = count;
 
         unsigned char aux_2 = *((unsigned char *) huff->item);
-        
+
         if(aux_2 == '*' || aux_2 == '\\')
             fprintf(file,"\\");
 
         fprintf(file, "%c", aux_2);
-      
-        //printf("DEPOIS: %d\n", count);
 
         return;
     }
 
     fprintf(file, "%c", *((unsigned char *) huff->item));
-    
+
     set_nodes(file, huff->left, byte, size_tree, count + 1);
     byte = set_bit(byte, count);
     set_nodes(file, huff->right, byte, size_tree, count + 1);

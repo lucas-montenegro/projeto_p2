@@ -49,7 +49,7 @@ hash *read_archive(char *name_file) {
 unsigned short read_write_compress(FILE *file_write, FILE *file_read, hash *h_byte){
     unsigned short count, i_aux, resto, aux, byte_m;
     unsigned char byte, byte_t;
-    
+
     while(feof(file_read) == 0) {
         byte_t = BYTE_ZERO;
         count = 0;
@@ -57,26 +57,46 @@ unsigned short read_write_compress(FILE *file_write, FILE *file_read, hash *h_by
         while(count < 8) {
             if (fscanf(file_read, "%c", &byte) == EOF)
                 break;
-            
+
             aux = *((unsigned short *) h_byte -> table[(unsigned short) byte] -> new_byte);
-            byte_m = aux;  
+            byte_m = aux;
             i_aux = count + h_byte->table[byte] -> byte_size;
-            //printf("byte: %x | new_byte: %x | byte_size: %d\n", byte, *((unsigned char *)h_byte->table[byte]->new_byte), h_byte->table[byte]->byte_size);
-
             if (i_aux > 8) {
-                count = i_aux % 8;
-                resto = i_aux % 8;
-                byte_m >>= resto;
-                byte_t = byte_t | ((unsigned char)byte_m);
-                
-                fprintf(file_write, "%c", byte_t);
+                if(i_aux < 16) {
+                    count = i_aux % 8;
+                    resto = i_aux % 8;
+                    byte_m >>= resto;
+                    byte_t = byte_t | ((unsigned char)byte_m);
 
-                byte_t = BYTE_ZERO;
-                byte_m = aux; 
-                //printf("%x %x\n\n", byte_m, byte_t);
-                byte_m <<= (16 - resto);
-                byte_m >>= 8;
-                //printf("Resto -> %x\n", byte_m);
+                    fprintf(file_write, "%c", byte_t);
+
+                    byte_t = BYTE_ZERO;
+                    byte_m = aux;
+                    byte_m <<= (16 - resto);
+                    byte_m >>= 8;
+                }
+                else {
+                    byte_m >>= 8;
+                    resto = i_aux % 8;
+                    byte_m >>= resto;
+
+                    byte_t = byte_t | ((unsigned char)byte_m); // primeiro byte
+                    fprintf(file_write, "%c", byte_t);
+
+                    byte_t = BYTE_ZERO;
+                    byte_m = aux;
+                    byte_m <<= (16 - (h_byte->table[byte]->byte_size - (8 - count)));
+                    byte_m >>= 8;
+
+                    byte_t = byte_t | ((unsigned char)byte_m); // segundo byte
+                    fprintf(file_write, "%c", byte_t);
+
+                    byte_t = BYTE_ZERO;
+                    byte_m = aux;
+                    byte_m <<= (16 - resto); //criacao do terceiro byte
+                    byte_m >>= 8;
+                    count = resto;
+                }
             }
             else {
                 byte_m <<= (8 - i_aux);
@@ -85,10 +105,9 @@ unsigned short read_write_compress(FILE *file_write, FILE *file_read, hash *h_by
 
             byte_t = byte_t | ((unsigned char)byte_m);
         }
-        
+
         fprintf(file_write, "%c", byte_t);
     }
 
-    printf("COUNT = %d\n", count);
     return (8 - count);
-}   
+}
