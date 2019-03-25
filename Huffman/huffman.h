@@ -2,7 +2,7 @@ typedef struct huff{
     void *item;
     void *new_byte;//new encoded byte
     unsigned short byte_size;
-    int frequency;
+    long long int frequency;
     struct huff *left;
     struct huff *right;
 }huff;

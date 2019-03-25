@@ -18,6 +18,4 @@ extern void min_heapify(heap *heap, int index);
 
 extern huff* dequeue(heap *heap);
 
-extern void print_heap(huff **data, int index, int size);
-
 extern huff* build_tree(heap *heap, hash *hash);

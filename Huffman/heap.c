@@ -86,16 +86,6 @@ huff* dequeue(heap *heap){
     }
 }
 
-void print_heap(huff **data, int index, int size){
-    if(index < size && data[index] != NULL){
-        if(index < size - 1)
-            printf(" | ");
-        else
-            printf("\n");
-        print_heap(data, index + 1, size);
-    }
-}
-
 huff* build_tree(heap *heap, hash *hash){
     for(int i = 0; i < 257; i++){
         if(hash->table[i] != NULL){
