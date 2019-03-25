@@ -60,11 +60,11 @@ void min_heapify(heap *heap, int index){
     int left = get_left_index(index);
     int right = get_right_index(index);
 
-    if(left <= heap->items && heap->data[left]->frequency <= heap->data[index]->frequency)/* CHANGE #1 (ERA <=) */
+    if(left <= heap->items && heap->data[left]->frequency <= heap->data[index]->frequency)
         smallest = left;
     else
         smallest = index;
-    if(right <= heap->items && heap->data[right]->frequency <= heap->data[smallest]->frequency)/* CHANGE #2 (ERA <=) */
+    if(right <= heap->items && heap->data[right]->frequency <= heap->data[smallest]->frequency)
         smallest = right;
 
     if(heap->data[index]->frequency != heap->data[smallest]->frequency){
@@ -88,7 +88,6 @@ huff* dequeue(heap *heap){
 
 void print_heap(huff **data, int index, int size){
     if(index < size && data[index] != NULL){
-        //printf("f = %d", data[index]->frequency);
         if(index < size - 1)
             printf(" | ");
         else

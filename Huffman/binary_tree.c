@@ -15,13 +15,3 @@ binary_t *create_binary_tree(unsigned char byte, binary_t *left, binary_t* right
 
 	return new_node;
 }
-
-void bt_print (binary_t *bt)
-{
-	if(bt == NULL)
-		return;
-
-	printf("%c ", *((unsigned char *)bt->item));
-	bt_print(bt->left);
-	bt_print(bt->right);
-}
