@@ -5,7 +5,7 @@
 #### [Link](https://support.zendesk.com/hc/pt-br/articles/203691016-Formata%C3%A7%C3%A3o-de-texto-com-Markdown)
 
 ## Planejamento do Huffman (Para o grupo).
-    Compilar com 'gcc main.c huffman.c heap.c hash.c -o main'
+    Compilar com 'gcc main.c huffman.c hash.c heap.c binary_tree.c compress.c descompress.c -o main'
 
 	1 PASSO:
 	-Criar a leitura do arquivo -> Lucas e João
