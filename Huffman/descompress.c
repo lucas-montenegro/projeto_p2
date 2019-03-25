@@ -49,7 +49,7 @@ unsigned char read_bit(unsigned char byte_1, int cont) {
 	return byte_1 & mask;
 }
 
-void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned short trash) {
+void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned short trash) { // arvore com uma letra
 	unsigned short cont = 0, cont_aux = 0, bit;
 	unsigned char byte_1, byte_2;
 
@@ -93,11 +93,11 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 			}
 			
 			if(current_node -> right == NULL && current_node -> left == NULL){
-					fprintf(new_file, "%c", *((unsigned char*) current_node -> item));
-					//printf("%c\n", *((unsigned char*)current_node -> item));
+				fprintf(new_file, "%c", *((unsigned char*) current_node -> item));
+				//printf("%c\n", *((unsigned char*)current_node -> item));
 
-					current_node = b_tree;
-				}
+				current_node = b_tree;
+			}
 
 			return;
 		}
@@ -160,7 +160,7 @@ void descompress(char *name_file)  {
 		return;
 	}
 
-	printf("byte_1 %x ", byte_1);
+	//printf("byte_1 %x ", byte_1);
 	
 	byte_1_aux = byte_1;
 	byte_1_aux >>= 5;
@@ -180,10 +180,10 @@ void descompress(char *name_file)  {
 		return;
 	}
 
-	printf("%x\n", byte_1);
+	//printf("%x\n", byte_1);
 	size_tree = (size_tree | ((unsigned short) byte_1));
 	
-	printf("trash: %d | size_tree %d\n", trash, size_tree);
+	//printf("trash: %d | size_tree %d\n", trash, size_tree);
 
 	//Leitura e da montagem da arvore
 	short count = 0;
@@ -195,7 +195,7 @@ void descompress(char *name_file)  {
 	//comeca a ler o arquivo byte_1 a byte_1 e descompacta o arquivo
 	treat_string_2(&name_file);
 	FILE *new_file = fopen(name_file, "wb"); //cria um novo arquivo, para descompactá-lo
-	read_descompress(file, new_file, b_tree, trash);
+	read_descompress(file, new_file, b_tree, trash); // tratar de arvore com uma letra
 	
 	//printf("10101100 01001101 11000000\n");
 	fclose(new_file);

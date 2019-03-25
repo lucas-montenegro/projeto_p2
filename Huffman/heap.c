@@ -88,7 +88,7 @@ huff* dequeue(heap *heap){
 
 void print_heap(huff **data, int index, int size){
     if(index < size && data[index] != NULL){
-        printf("f = %d", data[index]->frequency);
+        //printf("f = %d", data[index]->frequency);
         if(index < size - 1)
             printf(" | ");
         else

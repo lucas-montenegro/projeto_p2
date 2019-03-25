@@ -30,16 +30,9 @@ void compress(char *name_file) {
     hash *h_byte = read_archive(name_file);
     heap *h = create_heap(257);
     huff *huff_tree = build_tree(h, h_byte);
-
-    // printf("Hash:\n");
-    // for(int i = 0; i < 257; i++){
-    //     if(h_byte -> table[i] != NULL) {
-    //         printf("%d -> %x -> %d\n", *(unsigned char *)h_byte->table[i]->item, *(unsigned char *)h_byte->table[i]->item, h_byte->table[i]->frequency);
-    //     }
-    // }
     
-    // printf("Árvore:\n");
-    // pre_order(huff_tree);
+    //printf("Árvore:\n");
+    //pre_order(huff_tree);
     
     FILE *file_read = fopen(name_file, "rb");
     
@@ -50,6 +43,7 @@ void compress(char *name_file) {
     
     unsigned short size_tree = 0, trash;
     set_nodes(file_write, huff_tree, BYTE_ZERO, &size_tree, 0);
+
     trash = read_write_compress(file_write, file_read, h_byte);
 
     if(size_tree >= 8192)
