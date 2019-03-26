@@ -9,7 +9,6 @@
 #include "compress.h"
 #include "descompress.h"
 
-
 void treat_string(char **name_file) {
     unsigned short s1_string = strlen(*name_file), s2_string = s1_string + 4, i, ver = 0;
     char *new_string = (char *)malloc(sizeof(char) * s2_string);
@@ -17,6 +16,9 @@ void treat_string(char **name_file) {
         new_string[i] = '\0';
 
     for(i = 0; i < s1_string; i++){
+        if((*name_file)[i] == '.')
+            break;
+
         new_string[i] = (*name_file)[i];
     }
 
@@ -39,10 +41,8 @@ void set_nodes(FILE *file, huff *huff, unsigned short byte, unsigned short *size
         byte = byte >> (16 - count);
         *aux = byte;
         huff->new_byte = (void*)aux;
-
         if(count > 0)
             huff->byte_size = count;
-
         unsigned char aux_2 = *((unsigned char *) huff->item);
 
         if(aux_2 == '*' || aux_2 == '\\')
@@ -53,7 +53,7 @@ void set_nodes(FILE *file, huff *huff, unsigned short byte, unsigned short *size
         return;
     }
 
-    fprintf(file, "%c", *((unsigned char *) huff->item));
+    fprintf(file, "%c", *((unsigned char *) huff->item)); test.mp4.huff
 
     set_nodes(file, huff->left, byte, size_tree, count + 1);
     byte = set_bit(byte, count);
@@ -98,24 +98,19 @@ void compress(char *name_file) {
 hash *read_file(char *name_file) {
     FILE *file = fopen(name_file, "rb");
     hash *h_byte = create_hash();
-    unsigned char *byte = (unsigned char *) malloc(sizeof(unsigned char));
+    unsigned char *byte = (unsigned char*)malloc(sizeof(unsigned char));
 
     while(1) {
         if(fscanf(file, "%c", byte) == EOF)
             break;
-
         if(element_in_hash(h_byte, byte))
-            put_hash(h_byte, byte);//Não tá adicionando na hash
-        else
-        {
-            unsigned char *read_byte = (unsigned char *) malloc(sizeof(unsigned char));
+            put_hash(h_byte, byte);
+        else{
+            unsigned char *read_byte = (unsigned char*)malloc(sizeof(unsigned char));
             *read_byte = *byte;
-
             put_hash(h_byte, read_byte);
-        }    
+        }
     }
-
-    free(byte);
     fclose(file);
 
     return h_byte;

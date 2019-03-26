@@ -19,6 +19,7 @@ heap* create_heap(int size){
 }
 
 void realloc_heap(heap *heap){
+    printf("eae\n");
     heap->data = realloc(heap->data, (++heap->max) * sizeof(huff));
     return;
 }
