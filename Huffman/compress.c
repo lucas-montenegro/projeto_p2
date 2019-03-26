@@ -53,7 +53,7 @@ void set_nodes(FILE *file, huff *huff, unsigned short byte, unsigned short *size
         return;
     }
 
-    fprintf(file, "%c", *((unsigned char *) huff->item)); test.mp4.huff
+    fprintf(file, "%c", *((unsigned char *) huff->item));
 
     set_nodes(file, huff->left, byte, size_tree, count + 1);
     byte = set_bit(byte, count);
