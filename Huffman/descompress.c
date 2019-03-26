@@ -131,6 +131,9 @@ void file_extension(char **name_file)
 
 	for(i = 0; i < s1_string; i++){
 		if((*name_file)[i] == '.')
+			ver++;
+		
+		if(ver == 2)
 			break;
 
 		new_string[i] = (*name_file)[i];

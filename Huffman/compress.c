@@ -17,9 +17,6 @@ void treat_string(char **name_file) {
         new_string[i] = '\0';
 
     for(i = 0; i < s1_string; i++){
-        if((*name_file)[i] == '.')
-            break;
-
         new_string[i] = (*name_file)[i];
     }
 
