@@ -98,13 +98,24 @@ void compress(char *name_file) {
 hash *read_file(char *name_file) {
     FILE *file = fopen(name_file, "rb");
     hash *h_byte = create_hash();
+    unsigned char *byte = (unsigned char *) malloc(sizeof(unsigned char));
 
     while(1) {
-        unsigned char *read_byte = (unsigned char *) malloc(sizeof(unsigned char));
-        if(fscanf(file, "%c", read_byte) == EOF)
+        if(fscanf(file, "%c", byte) == EOF)
             break;
-        put_hash(h_byte, read_byte);
+
+        if(element_in_hash(h_byte, byte))
+            put_hash(h_byte, byte);//Não tá adicionando na hash
+        else
+        {
+            unsigned char *read_byte = (unsigned char *) malloc(sizeof(unsigned char));
+            *read_byte = *byte;
+
+            put_hash(h_byte, read_byte);
+        }    
     }
+
+    free(byte);
     fclose(file);
 
     return h_byte;

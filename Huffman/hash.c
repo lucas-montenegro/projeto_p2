@@ -27,3 +27,10 @@ void put_hash(hash *hash, unsigned char *read_byte) {
 
     return;
 }
+
+short element_in_hash(hash *hash, unsigned char *element) {
+    if(hash -> table[*element] == NULL)
+        return 0;
+    else
+        return 1;
+}
