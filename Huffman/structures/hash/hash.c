@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "huffman.h"
+#include "../../huffman_base/huffman.h"
 #include "hash.h"
 
 hash *create_hash(){

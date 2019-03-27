@@ -3,11 +3,11 @@
 #include <string.h>
 
 #include "huffman.h"
-#include "hash.h"
-#include "heap.h"
-#include "binary_tree.h"
-#include "compress.h"
-#include "descompress.h"
+#include "../structures/hash/hash.h"
+#include "../structures/heap/heap.h"
+#include "../structures/binary_tree/binary_tree.h"
+#include "compress/compress.h"
+#include "descompress/descompress.h"
 
 #define BYTE_ZERO 0
 

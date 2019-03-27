@@ -2,12 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "huffman.h"
-#include "hash.h"
-#include "heap.h"
-#include "binary_tree.h"
+#include "../huffman.h"
+#include "../../structures/hash/hash.h"
+#include "../../structures/heap/heap.h"
+#include "../../structures/binary_tree/binary_tree.h"
 #include "compress.h"
-#include "descompress.h"
 
 void treat_string(char **name_file) {
     unsigned short s1_string = strlen(*name_file), s2_string = s1_string + 4, i, ver = 0;

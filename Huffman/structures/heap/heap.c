@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "huffman.h"
-#include "hash.h"
+#include "../../huffman_base/huffman.h"
+#include "../hash/hash.h"
 #include "heap.h"
 
 struct heap{

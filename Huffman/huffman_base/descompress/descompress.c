@@ -2,11 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "huffman.h"
-#include "hash.h"
-#include "heap.h"
-#include "binary_tree.h"
-#include "compress.h"
+#include "../huffman.h"
+#include "../../structures/hash/hash.h"
+#include "../../structures/heap/heap.h"
+#include "../../structures/binary_tree/binary_tree.h"
 #include "descompress.h"
 
 void create_pre_order(binary_t **bt, FILE *file, short size, short *count)
