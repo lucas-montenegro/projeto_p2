@@ -2,6 +2,7 @@
 #include "../structures/hash/hash.h"
 #include "../structures/heap/heap.h"
 #include "../structures/binary_tree/binary_tree.h"
+#include <time.h>
 #include <CUnit/CUnit.h>
 #include "CUnit/Basic.h"
 
@@ -34,8 +35,37 @@ void huff_tests(){
 	//Vc cria entrada necessária e testa...
 }
 
-void hash_tests(){
 
+
+void hash_tests(){
+	hash* h_test = NULL;
+	h_test = create_hash();
+
+	CU_ASSERT(h_test != NULL); //Verificando se a hash foi criada.
+
+	srand(time(NULL));
+	unsigned char aux, *byte_test = (unsigned char *) malloc(sizeof(unsigned char));
+	unsigned short i, p = 0, sorted[5];
+
+	for (i = 0; i < 4; i++)
+		sorted[i] = (rand() % 1000);
+
+	//Adicionando 1000 bytes na hash e sorteando 5 aos quais serao posteriormente verificados.
+	//Casos como estes devem ser feitos para varias estruturas.
+	for(i = 0; i < 1000; i++)
+	{
+		aux = rand() % 256;
+		*byte_test = (unsigned char) aux;
+		put_hash(h_test, byte_test);
+
+		if((p <= 5)(i == sorted[p]))
+		{
+			sorted[p] = rand();
+			p++;
+		}
+	}
+
+	free(byte_test);
 }
 
 void heap_tests(){
