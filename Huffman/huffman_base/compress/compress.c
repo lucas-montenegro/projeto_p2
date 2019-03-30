@@ -65,6 +65,7 @@ void compress(char *name_file){
     if(huff_tree == NULL)
         return;
 
+
     FILE *file_read = fopen(name_file, "rb");
 
     treat_string(&name_file);
