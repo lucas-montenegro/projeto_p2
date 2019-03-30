@@ -8,7 +8,7 @@ TEST = test/test_cunit.c
 MAIN = huffman_base/main.c
 
 compile_huffman:
-	gcc $(COMPRESS) $(DESCOMPRESS) $(HUFFMAN) $(BINARY_TREE) $(HASH) $(HEAP) $(TEST) $(MAIN) -o huffman
+	gcc $(COMPRESS) $(DESCOMPRESS) $(HUFFMAN) $(BINARY_TREE) $(HASH) $(HEAP) $(MAIN) -o huffman
 
 compile_test:
 	gcc $(TEST) $(HUFFMAN) $(BINARY_TREE) $(HASH) $(HEAP) $(TEST) -o test_cunit -lcunit

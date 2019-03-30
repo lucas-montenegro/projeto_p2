@@ -19,7 +19,6 @@ heap* create_heap(int size){
 }
 
 void realloc_heap(heap *heap){
-    printf("eae\n");
     heap->data = realloc(heap->data, (++heap->max) * sizeof(huff));
     return;
 }
@@ -92,6 +91,11 @@ huff* build_tree(heap *heap, hash *hash){
         if(hash->table[i] != NULL){
             enqueue(heap, hash->table[i]);
         }
+    }
+    if(heap->items == 1)
+    {
+        printf("There's only one type of byte, can't build huffman tree\n");
+        return NULL;
     }
     while(heap->items > 1){
         huff *first = dequeue(heap), *second = dequeue(heap);
