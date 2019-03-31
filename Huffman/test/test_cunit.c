@@ -67,6 +67,8 @@ void hash_tests(){
 
 		CU_ASSERT(element_in_hash(h_test, byte_test));
 	}
+
+	free(byte_test);
 }
 
 void heap_tests(){
