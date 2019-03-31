@@ -14,19 +14,16 @@ void create_pre_order(binary_t **bt, FILE *file, short size_tree, short *count, 
 	if(*count == size_tree)
 		return;
 	unsigned char byte_1;
-	if(fscanf(file, "%c", &byte_1) == EOF)
-	{
+	if(fscanf(file, "%c", &byte_1) == EOF){
 		printf("Header incomplete\n");
 		return;
 	}
-	if(byte_1 == '*')
-	{
+	if(byte_1 == '*'){
 		*bt = create_binary_tree(byte_1, NULL, NULL);
 		create_pre_order(&((*bt)->left), file, size_tree, count, flag);
 		create_pre_order(&((*bt)->right), file, size_tree, count, flag);
 	}
-	else if(byte_1 == '\\')
-	{
+	else if(byte_1 == '\\'){
 		if(fscanf(file, "%c", &byte_1) == EOF)
 		{
 			printf("Header -> Tree incomplete\n");
@@ -39,7 +36,7 @@ void create_pre_order(binary_t **bt, FILE *file, short size_tree, short *count, 
 		*bt = create_binary_tree(byte_1, NULL, NULL);
 }
 
-unsigned char read_bit(unsigned char byte_1, int cont) {
+unsigned char read_bit(unsigned char byte_1, int cont){
 	unsigned char mask = 1 << (7 - cont);
 	return byte_1 & mask;
 }
@@ -49,19 +46,19 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 	unsigned char byte_1, byte_2;
 	binary_t *current_node = b_tree;
 
-	if(feof(file)) {
+	if(feof(file)){
 		printf("File incomplete.\n");
 		return;
 	}
 
-	while(fscanf(file, "%c", &byte_1) != EOF) {
+	while(fscanf(file, "%c", &byte_1) != EOF){
 		cont = 0;
 
-		if(fscanf(file, "%c", &byte_2) == EOF) {
+		if(fscanf(file, "%c", &byte_2) == EOF){
 			while(cont < (8 - trash)) {
 				bit = (unsigned short) read_bit(byte_1, cont);
 
-				if(current_node -> right != NULL || current_node -> left != NULL) {
+				if(current_node -> right != NULL || current_node -> left != NULL){
 					if(bit != 0)
 						current_node = current_node -> right;
 					else
@@ -85,7 +82,7 @@ void read_descompress(FILE *file, FILE *new_file, binary_t *b_tree, unsigned sho
 			while(cont <= 7) {
 				bit = (unsigned short) read_bit(byte_1, cont);
 
-				if(current_node -> right != NULL || current_node -> left != NULL) {
+				if(current_node -> right != NULL || current_node -> left != NULL){
 					if(bit != 0)
 						current_node = current_node -> right;
 					else
@@ -123,8 +120,7 @@ void descompress(char *name_file){
 	FILE *file = fopen(name_file, "rb");
 	binary_t *b_tree = NULL;
 
-	if(fscanf(file, "%c", &byte_1) == EOF)
-	{
+	if(fscanf(file, "%c", &byte_1) == EOF){
 		printf("Header incomplete\n");
 		return;
 	}

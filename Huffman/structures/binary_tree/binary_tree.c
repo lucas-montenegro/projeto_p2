@@ -5,10 +5,10 @@
 
 binary_t *create_binary_tree(unsigned char byte, binary_t *left, binary_t* right)
 {
-	unsigned char *aux = (unsigned char *) malloc(sizeof(unsigned char));
+	unsigned char *aux = (unsigned char*) malloc(sizeof(unsigned char));
 	*aux = byte;
 
-	binary_t *new_node = (binary_t *) malloc(sizeof(binary_t));
+	binary_t *new_node = (binary_t*) malloc(sizeof(binary_t));
 	new_node->item = (void *) aux;
 	new_node->left = left;
 	new_node->right = right;

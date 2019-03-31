@@ -76,7 +76,6 @@ void min_heapify(heap *heap, int index){
 
 huff* dequeue(heap *heap){
     if(heap->items <= 0){
-        printf("Heap Underflow\n");
         return NULL;
     } else {
         huff *node = heap->data[1];
