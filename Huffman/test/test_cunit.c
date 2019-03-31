@@ -35,7 +35,7 @@ void hash_tests(){
 	CU_ASSERT(h_test != NULL); //Verificando se a hash foi criada.
 
 	srand(time(NULL));
-	unsigned char aux, *byte_test = (unsigned char *) malloc(sizeof(unsigned char));
+	unsigned char aux, *byte_test;
 	unsigned short i, p = 0, sorted[5];
 
 	for (i = 0; i < 4; i++)
@@ -46,9 +46,13 @@ void hash_tests(){
 	for(i = 0; i < 1000; i++)
 	{
 		aux = rand() % 256;
+		byte_test = (unsigned char *) malloc(sizeof(unsigned char));
 		*byte_test = (unsigned char) aux;
+		
+		//Teste do elemento colocado
 		put_hash(h_test, byte_test);
-
+		CU_ASSERT(element_in_hash(h_test, byte_test));
+		
 		if((p <= 5) && (i == sorted[p]))
 		{
 			sorted[p] = aux;
@@ -56,7 +60,13 @@ void hash_tests(){
 		}
 	}
 
-	free(byte_test);
+	//Testes de elementos sorteados
+	byte_test = (unsigned char *) malloc(sizeof(unsigned char));
+	for(i = 0; i < 5; i++){
+		*byte_test = (unsigned char) sorted[p];
+
+		CU_ASSERT(element_in_hash(h_test, byte_test));
+	}
 }
 
 void heap_tests(){
