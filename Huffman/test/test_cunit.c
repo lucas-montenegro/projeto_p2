@@ -16,17 +16,13 @@ int clear_suite(void) {
 	return 0;
 }
 
-short pre_order_tree(binary_t *bt, char *str, unsigned short size, unsigned short *count) {
+int pre_order_tree(binary_t *bt, char *str, unsigned short size, unsigned short *count) {
 	if (bt == NULL)
 		return 0;
+	else if((*count > size) || (*((char *)bt->item) != str[*count]))
+		return 1;
 
-	//printf("%d -> %c | %c\n", *count, *((char *)bt->item), str[*count]);
-	//if((*count > size) || (*((char *)bt->item) != str[*count]))
-	//	return 1;
-
-	//*count += 1;
-	
-	printf("%c\n", *((char *)bt->item));
+	*count += 1;
 	pre_order_tree (bt->left, str, size, count);
 	pre_order_tree (bt->right, str, size, count);
 }
@@ -62,11 +58,11 @@ void hash_tests(){
 		aux = rand() % 256;
 		byte_test = (unsigned char *) malloc(sizeof(unsigned char));
 		*byte_test = (unsigned char) aux;
-		
+
 		//Teste do elemento colocado
 		put_hash(h_test, byte_test);
 		CU_ASSERT(element_in_hash(h_test, byte_test));
-		
+
 		if((p <= 5) && (i == sorted[p])){
 			sorted[p] = aux;
 			p++;
@@ -86,7 +82,7 @@ void hash_tests(){
 void heap_tests(){
 	heap *heap = create_heap(2);
 	huff *sos;
-	
+
 	for(int i = 0; i < 10; i++){
 		int *aux;
 		*aux = rand() % 100;
@@ -100,21 +96,21 @@ void heap_tests(){
 	CU_ASSERT(sos == NULL);
 }
 
-void binary_tree_tests(){
+void b_tests(){
 	unsigned short count = 0;
 	binary_t * binary_tree;
-	char *str = malloc(sizeof(char) * 13); 
-	str = "***AB*TR**nlp\0";	
+	char *str = malloc(sizeof(char) * 13);
+	str = "***AB*TR**nlp";
 
 	binary_tree = create_binary_tree(
-		str[0], 
-	
+		str[0],
+
 		create_binary_tree(
 			str[1],
-			
+
 			create_binary_tree(
 				str[2],
-				
+
 				create_binary_tree(
 					str[3],
 					NULL,
@@ -130,7 +126,7 @@ void binary_tree_tests(){
 
 			create_binary_tree(
 				str[5],
-				
+
 				create_binary_tree(
 					str[6],
 					NULL,
@@ -142,7 +138,7 @@ void binary_tree_tests(){
 					NULL,
 					NULL
 				)
-			)			
+			)
 		) ,
 
 		create_binary_tree(
@@ -169,19 +165,16 @@ void binary_tree_tests(){
 				NULL,
 				NULL
 			)
-		) 
+		)
 	) ;
 
-	//CU_ASSERT(binary_tree != NULL);
-	printf("%d\n", pre_order_tree(binary_tree, str, strlen(str) - 1, &count));
-	CU_ASSERT(pre_order_tree(binary_tree, str, strlen(str) - 1, &count));
+	CU_ASSERT(binary_tree != NULL);
+	CU_ASSERT(pre_order_tree(binary_tree, str, 12, &count) == 0);
 }
 
 int main(){
 	srand(time(NULL));
 	CU_pSuite pSuite = NULL;
-
-	binary_tree_tests();
 
 	if(CUE_SUCCESS != CU_initialize_registry())
 		return CU_get_error();
@@ -192,7 +185,7 @@ int main(){
 	if(pSuite == NULL){
 		return CU_get_error();
 	}
-	
+
 	if(NULL == CU_add_test(pSuite, "hash_tests", hash_tests)){
 		CU_cleanup_registry();
 		return CU_get_error();
@@ -208,7 +201,7 @@ int main(){
 		return CU_get_error();
 	}
 
-	if(NULL == CU_add_test(pSuite, "binary_tree_tests", binary_tree_tests)){
+	if(NULL == CU_add_test(pSuite, "b_tests", b_tests)){
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
