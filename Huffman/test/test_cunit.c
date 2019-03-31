@@ -70,7 +70,6 @@ void hash_tests(){
 
 	free(byte_test);
 }
-
 void heap_tests(){
 	heap *heap = create_heap(2);
 	huff *sos;
@@ -89,6 +88,7 @@ void heap_tests(){
 }
 
 void binary_tree_tests(){
+	create_
 	return;
 }
 
