@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "../huffman_base/huffman.h"
 #include "../structures/hash/hash.h"
 #include "../structures/heap/heap.h"
@@ -14,23 +16,12 @@ int clear_suite(void) {
 	return 0;
 }
 
-int equals(DATATYPE d1, DATATYPE d2) {
-	UCH x, y;
-	x = ((UCH)d1);
-	y = ((UCH)d2);
-	return x == y;
-}
-
-void print(DATATYPE d) {
-	UCH x = d;
-	printf("%c", x);
-}
-
 //Testar criação das estruturas e funções principais (Chamar CU_ASSERT para cada aspecto testado)
 //Para cada estrutura
 
 void huff_tests(){
-	CU_ASSERT(); //{sentença que vai conter uma expressão (Verdadeira ou falsa)}
+	return;
+	//CU_ASSERT(); //{sentença que vai conter uma expressão (Verdadeira ou falsa)}
 	//Para testar cada aspecto da estrutura
 	//Vc cria entrada necessária e testa...
 }
@@ -58,9 +49,9 @@ void hash_tests(){
 		*byte_test = (unsigned char) aux;
 		put_hash(h_test, byte_test);
 
-		if((p <= 5)(i == sorted[p]))
+		if((p <= 5) && (i == sorted[p]))
 		{
-			sorted[p] = rand();
+			sorted[p] = aux;
 			p++;
 		}
 	}
@@ -69,15 +60,15 @@ void hash_tests(){
 }
 
 void heap_tests(){
-
+	return;
 }
 
 void binary_tree_tests(){
-
+	return;
 }
 
 int run_tests() {
-	huff_tests()
+	huff_tests();
 	hash_tests();
 	heap_tests();
 	binary_tree_tests();
@@ -92,8 +83,12 @@ int main(){
 	}
 
 	pSuite = CU_add_suite("Basic_Test_Suite", init_suite, clear_suite);
-	
 	if(pSuite == NULL){
+		return CU_get_error();
+	}
+	
+	if(NULL == CU_add_test(pSuite, "hash_tests", hash_tests)) {
+		CU_cleanup_registry();
 		return CU_get_error();
 	}
 
@@ -102,10 +97,6 @@ int main(){
 		return CU_get_error();
 	}
 
-	if(NULL == CU_add_test(pSuite, "hash_tests", hash_tests)) {
-		CU_cleanup_registry();
-		return CU_get_error();
-	}
 
 	if(NULL == CU_add_test(pSuite, "heap_tests", heap_tests)) {
 		CU_cleanup_registry();
