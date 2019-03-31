@@ -10,15 +10,21 @@
 #include "../huffman_base/compress/compress.h"
 #include "../huffman_base/descompress/descompress.h"
 
-int main () {
+int main(){
 	unsigned short i, size, count = 0;
 	long long int t;
 	char aux;
 	char *str_0 = (char *) malloc(sizeof(char) * 15000);
 	char *str_1 = (char *) malloc(sizeof(char) * 15000);
-	char entrie_0[20] = "archive_test.txt";
-	char entrie_1[20] = "archive_test.huff"; 
-	char entrie_2[20] = "archive_test";
+	
+	char *entrie_0 = (char *) malloc(sizeof(char) * 16);
+	entrie_0 = "archive_test.txt";
+
+	char *entrie_1 = (char *) malloc(sizeof(char) * 17);
+	entrie_1 = "archive_test.huff"; 
+	
+	char *entrie_2 = (char *) malloc(sizeof(char) * 12);
+	entrie_2 = "archive_test";
 
 	FILE *archive, *test_log = fopen("test.log", "w");  
 
