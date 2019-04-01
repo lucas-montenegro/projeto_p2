@@ -59,9 +59,9 @@ void set_nodes(FILE *file, huff *huff, unsigned short byte, unsigned short *size
 }
 
 void compress(char *name_file){
-    hash *h_byte = read_file(name_file);
+    hash *hash = read_file(name_file);
     heap *h = create_heap(2);
-    huff *huff_tree = build_tree(h, h_byte);
+    huff *huff_tree = build_tree(h, hash);
     if(huff_tree == NULL)
         return;
 
@@ -75,7 +75,7 @@ void compress(char *name_file){
     unsigned short size_tree = 0, trash;
     set_nodes(file_write, huff_tree, BYTE_ZERO, &size_tree, 0);
 
-    trash = read_write_compress(file_write, file_read, h_byte);
+    trash = read_write_compress(file_write, file_read, hash);
 
     if(size_tree >= 8192)
     {
@@ -96,86 +96,87 @@ void compress(char *name_file){
 
 hash *read_file(char *name_file){
     FILE *file = fopen(name_file, "rb");
-    hash *h_byte = create_hash();
+    hash *hash = create_hash();
     unsigned char *byte = (unsigned char*)malloc(sizeof(unsigned char));
 
     while(1) {
         if(fscanf(file, "%c", byte) == EOF)
             break;
-        if(element_in_hash(h_byte, byte))
-            put_hash(h_byte, byte);
+        if(element_in_hash(hash, byte))
+            put_hash(hash, byte);
         else{
             unsigned char *read_byte = (unsigned char*)malloc(sizeof(unsigned char));
             *read_byte = *byte;
-            put_hash(h_byte, read_byte);
+            put_hash(hash, read_byte);
         }
     }
     fclose(file);
 
-    return h_byte;
+    return hash;
 }
 
-unsigned short read_write_compress(FILE *file_write, FILE *file_read, hash *h_byte){
-    unsigned short count, current_index, mod, aux, byte_m;
-    unsigned char byte, byte_t;
+unsigned short read_write_compress(FILE *file_write, FILE *file_read, hash *hash){
+    unsigned short count, current_index, mod, aux, n_byte;
+    unsigned char byte, p_byte;
 
     while(feof(file_read) == 0) {
-        byte_t = BYTE_ZERO;
+        p_byte = BYTE_ZERO;
         count = 0;
 
         while(count < 8) {
             if (fscanf(file_read, "%c", &byte) == EOF)
                 break;
 
-            aux = *((unsigned short *) h_byte -> table[(unsigned short) byte] -> new_byte);
-            byte_m = aux;
-            current_index = count + h_byte->table[byte] -> byte_size;
-            if (current_index > 8) {
-                if(current_index < 16) {
-                    mod = current_index % 8;
+            n_byte = *(unsigned short*) hash -> table[(unsigned char) byte] -> new_byte;
+            current_index = count + hash->table[byte] -> byte_size;
+            if (current_index > 8){
+
+                aux = n_byte;
+                mod = current_index % 8;
+                           
+                if(current_index < 16){
                     count = mod;
-                    byte_m >>= mod;
-                    byte_t = byte_t | ((unsigned char)byte_m);
+                    n_byte >>= mod;
+                    p_byte = p_byte | ((unsigned char)n_byte);
 
-                    fprintf(file_write, "%c", byte_t);
+                    fprintf(file_write, "%c", p_byte);
 
-                    byte_t = BYTE_ZERO;
-                    byte_m = aux;
-                    byte_m <<= (16 - mod);
-                    byte_m >>= 8;
+                    p_byte = BYTE_ZERO;
+                    n_byte = aux;
+                    n_byte <<= (16 - mod);
+                    n_byte >>= 8;
                 }
                 else {
-                    byte_m >>= 8;
-                    mod = current_index % 8;
-                    byte_m >>= mod;
+                    n_byte >>= 8;
+                    n_byte >>= mod;
 
-                    byte_t = byte_t | ((unsigned char)byte_m); // primeiro byte
-                    fprintf(file_write, "%c", byte_t);
+                    p_byte = p_byte | ((unsigned char)n_byte); // primeiro byte
+                    fprintf(file_write, "%c", p_byte);
 
-                    byte_t = BYTE_ZERO;
-                    byte_m = aux;
-                    byte_m <<= (16 - (h_byte->table[byte]->byte_size - (8 - count)));
-                    byte_m >>= 8;
+                    p_byte = BYTE_ZERO;
+                    n_byte = aux;
+                    n_byte <<= (16 - (hash->table[(unsigned char) byte]->byte_size - (8 - count)));
+                    n_byte >>= 8;
 
-                    byte_t = byte_t | ((unsigned char)byte_m); // segundo byte
-                    fprintf(file_write, "%c", byte_t);
+                    p_byte = p_byte | ((unsigned char)n_byte); // segundo byte
+                    fprintf(file_write, "%c", p_byte);
 
-                    byte_t = BYTE_ZERO;
-                    byte_m = aux;
-                    byte_m <<= (16 - mod); //criacao do terceiro byte
-                    byte_m >>= 8;
+                    p_byte = BYTE_ZERO;
+                    n_byte = aux;
+                    n_byte <<= (16 - mod); //criacao do terceiro byte
+                    n_byte >>= 8;
                     count = mod;
                 }
             }
             else {
-                byte_m <<= (8 - current_index);
-                count += h_byte->table[byte]->byte_size;
+                n_byte <<= (8 - current_index);
+                count += hash->table[byte]->byte_size;
             }
 
-            byte_t = byte_t | ((unsigned char)byte_m);
+            p_byte = p_byte | ((unsigned char)n_byte);
         }
 
-        fprintf(file_write, "%c", byte_t);
+        fprintf(file_write, "%c", p_byte);
     }
 
     return (8 - count);

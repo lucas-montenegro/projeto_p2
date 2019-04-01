@@ -28,14 +28,12 @@ int main(){
 
 	FILE *archive, *test_log = fopen("test.log", "w");  
 
-	while (1) {
+	while (1){
 		count ++;
-		printf("Count: %d\n", count);
 
 		archive = fopen(entrie_0, "w");
 		t = time(NULL) * rand();
 		srand(t);
-		printf("Semente time: %lld\n\n", t);
 		size = rand() % 10000;
 
 		for(i = 0; i < size; i++) {
@@ -46,16 +44,14 @@ int main(){
 		
 		fclose(archive);
 		archive = fopen(entrie_0, "r");
-		fscanf(archive, "%[^\n]s", str_0);
+		fscanf(archive, "%[^\n]", str_0);
 		fclose(archive);
 
-		printf("dsada\n");
 		compress(entrie_0);
-		printf("dsada\n");
 		descompress(entrie_1);
 		
 		archive =  fopen(entrie_2, "r");
-		fscanf(archive, "%[^\n]s", str_1);
+		fscanf(archive, "%[^\n]", str_1);
 		fclose(archive);
 
 		if (strcmp(str_0, str_1) != 0) {
@@ -68,8 +64,8 @@ int main(){
 			fprintf(test_log, "\n%s\n", "-----------------------------------------------------------------------");		
 		}
 
-		memset(str_0, 0, sizeof(str_0));
-		memset(str_0, 0, sizeof(str_1));
+		memset(str_0, '\0', sizeof(str_0));
+		memset(str_0, '\0', sizeof(str_1));
 	}
 
 	return 0;
