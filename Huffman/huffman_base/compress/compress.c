@@ -93,7 +93,6 @@ void compress(char *name_file){
     fprintf(file_write, "%c%c", byte_1, byte_2);
 }
 
-
 hash *read_file(char *name_file){
     FILE *file = fopen(name_file, "rb");
     hash *hash = create_hash();

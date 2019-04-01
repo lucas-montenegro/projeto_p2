@@ -280,15 +280,10 @@ int main()
 
 	system("Rscript script.r");
 	
-	printf("Exibindo ...\n");
-
-	system("firefox Rplots.pdf");
-
 	sleep(2);
 
 	system("rm saida_bt.csv");
 	system("rm saida_list.csv");
-	system("rm Rplots.pdf");
 	
 
 	printf("Programa Terminado\n");
