@@ -20,8 +20,8 @@ void create_pre_order(binary_t **bt, FILE *file, short size_tree, short *count)
 	}
 	if(byte_1 == '*'){
 		*bt = create_binary_tree(byte_1, NULL, NULL);
-		create_pre_order(&((*bt)->left), file, size_tree, count, flag);
-		create_pre_order(&((*bt)->right), file, size_tree, count, flag);
+		create_pre_order(&((*bt)->left), file, size_tree, count);
+		create_pre_order(&((*bt)->right), file, size_tree, count);
 	}
 	else if(byte_1 == '\\'){
 		if(fscanf(file, "%c", &byte_1) == EOF)
