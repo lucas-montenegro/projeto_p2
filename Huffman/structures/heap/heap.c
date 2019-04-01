@@ -10,7 +10,7 @@ struct heap{
     huff **data;
 };
 
-heap* create_heap(int size){
+heap* create_heap(int size) {
     heap *newHeap = (heap*) malloc(sizeof(heap));
     newHeap->data = (huff**) malloc(size * sizeof(huff));
     newHeap->items = 0;
