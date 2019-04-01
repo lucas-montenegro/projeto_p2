@@ -8,10 +8,10 @@
 #include "../../structures/binary_tree/binary_tree.h"
 #include "descompress.h"
 
-void create_pre_order(binary_t **bt, FILE *file, short size_tree, short *count, short *flag)
+void create_pre_order(binary_t **bt, FILE *file, short size_tree, short *count)
 {
 	*count += 1;
-	if(*count == size_tree)
+	if(*count > size_tree)
 		return;
 	unsigned char byte_1;
 	if(fscanf(file, "%c", &byte_1) == EOF){
@@ -141,8 +141,8 @@ void descompress(char *name_file){
 
 	size_tree = (size_tree | ((unsigned short) byte_1));
 
-	short count = 0, flag = 0;
-	create_pre_order(&b_tree, file, size_tree, &count, &flag);//Leitura e da montagem da arvore
+	short count = 0;
+	create_pre_order(&b_tree, file, size_tree, &count);//Leitura e da montagem da arvore
 
 	file_extension(&name_file);
 	FILE *new_file = fopen(name_file, "wb"); //cria um novo arquivo, para descompactá-lo
