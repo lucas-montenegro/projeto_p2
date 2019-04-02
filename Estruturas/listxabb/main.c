@@ -277,13 +277,8 @@ int main()
 	fclose(data_list);
 
 	printf("Gerando gráfico ...\n");
-
-	system("Rscript script.r");
 	
 	sleep(2);
-
-	system("rm saida_bt.csv");
-	system("rm saida_list.csv");
 	
 
 	printf("Programa Terminado\n");

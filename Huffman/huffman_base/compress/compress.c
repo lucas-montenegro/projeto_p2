@@ -153,7 +153,7 @@ unsigned short read_write_compress(FILE *file_write, FILE *file_read, hash *hash
                     fprintf(file_write, "%c", p_byte);
 
                     p_byte = BYTE_ZERO;
-                    n_byte = aux;
+                    n_byte = aux;                                               
                     n_byte <<= (16 - (hash->table[(unsigned char) byte]->byte_size - (8 - count)));
                     n_byte >>= 8;
 
@@ -178,5 +178,5 @@ unsigned short read_write_compress(FILE *file_write, FILE *file_read, hash *hash
         fprintf(file_write, "%c", p_byte);
     }
 
-    return (8 - count);
+    return (7 - count);
 }

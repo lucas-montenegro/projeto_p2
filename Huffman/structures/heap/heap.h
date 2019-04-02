@@ -1,4 +1,7 @@
-typedef struct heap heap;
+typedef struct heap{
+    int items, max;
+    huff **data;
+}heap;
 
 extern heap* create_heap(int size);
 

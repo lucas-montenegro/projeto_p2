@@ -80,20 +80,30 @@ void hash_tests(){
 	free(byte_test);
 }
 void heap_tests(){
-	heap *heap = create_heap(2);
-	huff *sos;
+	heap *h = create_heap(2);
+	huff *sos, *idk, *merged, *root;
 
 	for(int i = 0; i < 10; i++){
-		int *aux;
+		int *aux = (int*) malloc(sizeof(int));
 		*aux = rand() % 100;
 		huff *node = create_node((void*)aux);
-		enqueue(heap, node);
+		enqueue(h, node);
 	}
-	for(int i = 0; i < 10; i++)
-		sos = dequeue(heap);
-
-	sos = dequeue(heap);
-	CU_ASSERT(sos == NULL);
+	huff* test = h->data[1];
+	CU_ASSERT(test != NULL);
+	while(h->items > 1)
+	{
+		sos = dequeue(h), idk = dequeue(h);
+		merged = merge_nodes(sos, idk);
+		enqueue(h, merged);
+	}
+	root = dequeue(h);
+	sos = dequeue(h);
+	CU_ASSERT(sos == NULL);	
+	CU_ASSERT(root != NULL);
+	CU_ASSERT(root->frequency > root->left->frequency);
+	CU_ASSERT(root->frequency > root->right->frequency);
+	
 }
 
 void b_tests(){

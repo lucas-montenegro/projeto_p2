@@ -5,11 +5,6 @@
 #include "../hash/hash.h"
 #include "heap.h"
 
-struct heap{
-    int items, max;
-    huff **data;
-};
-
 heap* create_heap(int size) {
     heap *newHeap = (heap*) malloc(sizeof(heap));
     newHeap->data = (huff**) malloc(size * sizeof(huff));
